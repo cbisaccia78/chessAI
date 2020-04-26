@@ -69,11 +69,17 @@ class Game:
 
 
 
-    def isLegal(move):
+    def isLegal(self,move):
         #move is defined as move = [piece, row1, column1, row2, column2]
+        #can the piece move in that pattern?
+        #if not does the move run into a friendly piece
+        #if not does the move leave you in check
+        #if not then you're good to go
+
+
         return
 
-    def movePiece(move):
+    def movePiece(self,move):
         if(isLegal(move)):
             return
         else:
@@ -113,9 +119,6 @@ class Game:
             game.append(row)
 
         return game
-
-
-
 
 
 
