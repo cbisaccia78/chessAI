@@ -66,6 +66,34 @@ class Knight(Piece):
         x = self.location[0]
         y = self.location[1]
         possibles = ()
+        if x > 1: #x-2 > -1
+            if y > 0:
+                possibles.append((x-2, y-1))
+            if y < 7:
+                possibles.append((x-2, y+1))
+        if x-1 > -1
+
+    def knightMove(move):
+        x1 = self.location[0]
+        y1 = self.location[1]
+        x2 = move[1]
+        y2 = move[2]
+        if ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)) == 5:
+            if x2 > -1:
+                if x2 < 8:
+                    if y2 > -1:
+                        if y2 < 8:
+                            return True
+                        else:
+                            return False
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
 
 
 class Bishop(Piece):
@@ -74,12 +102,67 @@ class Bishop(Piece):
     def moves():
         return
 
+    def bishopMove(move):
+        x1 = self.location[0]
+        y1 = self.location[1]
+        x2 = move[1]
+        y2 = move[2]
+
+        if y2-y1 == 0:
+            return False
+
+        if x2-x1 == 0:
+            return False
+
+        if abs((x2-x1)/(y2-y1)) == 1:
+            if x2 > -1:
+                if x2 < 8:
+                    if y2 > -1:
+                        if y2 < 8:
+                            return True
+                        else:
+                            return False
+                    else:
+                        return False
+                else:
+                    return False
+            else:
+                return False
+        else:
+            return False
+        return
+
 
 class Pawn(Piece):
     def __init__(self,color,name,value,location):
         super().__init__(color,name,value,location)
+        self.moved = False
     def moves():
         return
+
+    def pawnMove(move):
+        x1 = self.location[0]
+        y1 = self.location[1]
+        x2 = move[1]
+        y2 = move[2]
+
+        if y2-y1 == 1:
+            if x2-x1 == 1 or x2 - x1 == 0: ##considers a diagonal attack to be a a legal move
+                return True                ##therefore another part of the program must check that
+                                           ##an enemy piece does indeed exist there
+            else:
+                return False:
+        elif y2-y1 == 2:
+            if self.moved:
+                return False
+            if x2-x1 == 0:
+                return True
+            else:
+                return False
+
+
+        else:
+            return False
 
 
 class Rook(Piece):
@@ -88,6 +171,8 @@ class Rook(Piece):
     def moves():
         return
 
+    def rookMove(move):
+        return
 
 class Queen(Piece):
     def __init__(self,color,name,value,location):
@@ -95,11 +180,17 @@ class Queen(Piece):
     def moves():
         return
 
+    def queenMove(move):
+        return
+
 
 class King(Piece):
     def __init__(self,color,name,value,location):
         super().__init__(color,name,value,location)
     def moves():
+        return
+
+    def kingMove(move):
         return
 
 
