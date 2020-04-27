@@ -73,11 +73,11 @@ class Knight(Piece):
                 possibles.append((x-2, y+1))
         if x-1 > -1
 
-    def knightMove(move):
+    def legalPattern(xy):
         x1 = self.location[0]
         y1 = self.location[1]
-        x2 = move[1]
-        y2 = move[2]
+        x2 = xy[0]
+        y2 = xy[1]
         if ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)) == 5:
             if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
                 return True
@@ -93,11 +93,11 @@ class Bishop(Piece):
     def moves():
         return
 
-    def bishopMove(move):
+    def legalPattern(xy):
         x1 = self.location[0]
         y1 = self.location[1]
-        x2 = move[1]
-        y2 = move[2]
+        x2 = xy[0]
+        y2 = xy[1]
 
         if y2-y1 == 0:
             return False
@@ -122,11 +122,11 @@ class Pawn(Piece):
     def moves():
         return
 
-    def pawnMove(move):
+    def legalPattern(xy):
         x1 = self.location[0]
         y1 = self.location[1]
-        x2 = move[1]
-        y2 = move[2]
+        x2 = xy[0]
+        y2 = xy[1]
 
         if y2-y1 == 1:
              ##considers a diagonal attack to be a a legal move
@@ -162,11 +162,11 @@ class Rook(Piece):
     def moves():
         return
 
-    def rookMove(move):
+    def legalPattern(xy):
         x1 = self.location[0]
         y1 = self.location[1]
-        x2 = move[1]
-        y2 = move[2]
+        x2 = xy[0]
+        y2 = xy[1]
 
         if (y2 - y1 == 0) != (x2-x1 == 0): #quick xor
             if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
@@ -183,12 +183,12 @@ class Queen(Piece):
     def moves():
         return
 
-    def queenMove(move):
+    def legalPattern(xy):
 
         x1 = self.location[0]
         y1 = self.location[1]
-        x2 = move[1]
-        y2 = move[2]
+        x2 = xy[0]
+        y2 = xy[1]
 
         if (y2-y1 == 0) != (x2-x1 == 0): #moves like rook
             if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
@@ -211,11 +211,11 @@ class King(Piece):
     def moves():
         return
 
-    def kingMove(move):
+    def legalPattern(xy):
         x1 = self.location[0]
         y1 = self.location[1]
-        x2 = move[1]
-        y2 = move[2]
+        x2 = xy[0]
+        y2 = xy[1]
 
         if (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) == 2:
             if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
@@ -250,11 +250,34 @@ class Game:
         self.game = self.initializeGame()
 
 
+    def check(self, move): #check if a move puts yourself in check
+        return
 
 
     def isLegal(self,move):
         #move is defined as move = [piece, x, y]
-        #can the piece move in that pattern?
+        piece = move[0]
+        x2 = move[1]
+        y2 = move[2]
+        square = self.game[x2][y2]
+        if piece.legalPattern((x2, y2)):#can the piece move in that pattern?
+                if !(isinstance(square, Empty)): #is the square nonempty
+                    if square.getColor() != piece.getColor(): #is it an enemy piece?
+                        if !(self.check(move): #does the move not put you in check?
+                            return True
+                        else:
+                            return False
+                    else: #friendly fire!
+                        return False
+                else:
+                    if !(self.check(move)):
+                        return True
+                    else:
+                        return False
+        else:
+            return False
+
+
         #if not does the move run into a friendly piece
         #if not does the move leave you in check
         #if not then you're good to go
@@ -306,9 +329,12 @@ class Game:
 
 
 
-    def state():
+    def state(self):
         #outside will call this function to get access to state
-        return gameState
+        return gameState #where gamestate is an array of relevant game info
+
+    def checkMate(self):
+        return False
 
 
 
