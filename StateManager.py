@@ -26,11 +26,12 @@ class Player:
         return self.time
 
 class Piece:
-    def __init__(self, color, name, value):
+    def __init__(self, color, name, value, location):
         """empty = 0 pawn = 1 knight = 2 bishop = 3 rook = 4 queen = 5 king = 6 """
         self.color = color
         self.name = name
         self.value = value
+        self.location = location
 
     def getName(self):
         if self.value == 2 or self.value == 6:
@@ -43,6 +44,65 @@ class Piece:
 
     def getValue(self):
         return self.value
+
+    def getCoords(self):
+        return self.location
+
+
+
+
+
+class Empty(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def movesTo():
+        return
+
+
+class Knight(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def moves():
+        x = self.location[0]
+        y = self.location[1]
+        possibles = ()
+
+
+class Bishop(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def moves():
+        return
+
+
+class Pawn(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def moves():
+        return
+
+
+class Rook(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def moves():
+        return
+
+
+class Queen(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def moves():
+        return
+
+
+class King(Piece):
+    def __init__(self,color,name,value,location):
+        super().__init__(color,name,value,location)
+    def moves():
+        return
+
+
 
 def color(i):
     if(i == 0 or i == 1):
@@ -70,7 +130,7 @@ class Game:
 
 
     def isLegal(self,move):
-        #move is defined as move = [piece, row1, column1, row2, column2]
+        #move is defined as move = [piece, x, y]
         #can the piece move in that pattern?
         #if not does the move run into a friendly piece
         #if not does the move leave you in check
@@ -98,24 +158,24 @@ class Game:
         for i in range(0,8):
             row = []
             if i == 0 or i == 7:
-                row.append(Piece(color(i), "rook", 4))
-                row.append(Piece(color(i), "knight", 2))
-                row.append(Piece(color(i), "bishop", 3))
+                row.append(Rook(color(i), "rook", 4, (i,0)))
+                row.append(Knight(color(i), "knight", 2,(i,1)))
+                row.append(Bishop(color(i), "bishop", 3,(i,2)))
                 if i == 0:
-                    row.append(Piece(color(i), "queen", 5))
-                    row.append(Piece(color(i), "king", 6))
+                    row.append(Queen(color(i), "queen", 5,(i,3)))
+                    row.append(King(color(i), "king", 6,(i,4)))
                 else:
-                    row.append(Piece(color(i), "king", 6))
-                    row.append(Piece(color(i), "queen", 5))
-                row.append(Piece(color(i), "bishop", 3))
-                row.append(Piece(color(i), "knight", 2))
-                row.append(Piece(color(i), "rook", 4))
+                    row.append(King(color(i), "king", 6,(i,3)))
+                    row.append(Queen(color(i), "queen", 5,(i,4)))
+                row.append(Bishop(color(i), "bishop", 3,(i,5)))
+                row.append(Knight(color(i), "knight", 2,(i,6)))
+                row.append(Rook(color(i), "rook", 4,(i,7)))
             elif i == 1 or i == 6:
                 for j in range(0,8):
-                    row.append(Piece(color(i), "pawn", 1))
+                    row.append(Pawn(color(i), "pawn", 1,(i,j)))
             else:
                 for k in range(0,8):
-                    row.append(Piece("null", "empty", 0))
+                    row.append(Empty("null", "empty", 0,(i,k)))
             game.append(row)
 
         return game
@@ -132,6 +192,3 @@ class Game:
 
 chessGame = Game(5, "cole", "computer")
 chessGame.printGame()
-
-
-while True:
