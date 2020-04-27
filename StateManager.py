@@ -79,17 +79,8 @@ class Knight(Piece):
         x2 = move[1]
         y2 = move[2]
         if ((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)) == 5:
-            if x2 > -1:
-                if x2 < 8:
-                    if y2 > -1:
-                        if y2 < 8:
-                            return True
-                        else:
-                            return False
-                    else:
-                        return False
-                else:
-                    return False
+            if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
+                return True
             else:
                 return False
         else:
@@ -115,22 +106,13 @@ class Bishop(Piece):
             return False
 
         if abs((x2-x1)/(y2-y1)) == 1:
-            if x2 > -1:
-                if x2 < 8:
-                    if y2 > -1:
-                        if y2 < 8:
-                            return True
-                        else:
-                            return False
-                    else:
-                        return False
-                else:
-                    return False
+            if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
+                return True
             else:
                 return False
         else:
             return False
-        return
+
 
 
 class Pawn(Piece):
@@ -147,16 +129,25 @@ class Pawn(Piece):
         y2 = move[2]
 
         if y2-y1 == 1:
-            if x2-x1 == 1 or x2 - x1 == 0: ##considers a diagonal attack to be a a legal move
-                return True                ##therefore another part of the program must check that
-                                           ##an enemy piece does indeed exist there
+             ##considers a diagonal attack to be a a legal move
+              ##therefore another part of the program must check that
+              ##an enemy piece does indeed exist there
+            if (x2-x1 == 1) or (x2 - x1 == 0):
+                if (x2 > -1) and (x2 < 8) and (y2 < 8):
+                    return True
+                else:
+                    return False
+
             else:
                 return False:
         elif y2-y1 == 2:
             if self.moved:
                 return False
             if x2-x1 == 0:
-                return True
+                if y2 < 8:
+                    return True
+                else:
+                    return False
             else:
                 return False
 
@@ -172,7 +163,19 @@ class Rook(Piece):
         return
 
     def rookMove(move):
-        return
+        x1 = self.location[0]
+        y1 = self.location[1]
+        x2 = move[1]
+        y2 = move[2]
+
+        if (y2 - y1 == 0) != (x2-x1 == 0): #quick xor
+            if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
+                return True
+            else:
+                return False
+        else:
+            return False
+
 
 class Queen(Piece):
     def __init__(self,color,name,value,location):
@@ -181,7 +184,25 @@ class Queen(Piece):
         return
 
     def queenMove(move):
-        return
+
+        x1 = self.location[0]
+        y1 = self.location[1]
+        x2 = move[1]
+        y2 = move[2]
+
+        if (y2-y1 == 0) != (x2-x1 == 0): #moves like rook
+            if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
+                return True
+        elif y2-y1 != 0: #then we know x2-x1 !=0
+            if abs((x2-x1)/(y2-y1)) == 1:
+                if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
+                    return True
+                else:
+                    return False
+            else:
+                return False
+        else: #if it doesnt move like a rook or bishop
+            return False
 
 
 class King(Piece):
@@ -191,7 +212,18 @@ class King(Piece):
         return
 
     def kingMove(move):
-        return
+        x1 = self.location[0]
+        y1 = self.location[1]
+        x2 = move[1]
+        y2 = move[2]
+
+        if (x2-x1)*(x2-x1) + (y2-y1)*(y2-y1) == 2:
+            if x2 > -1 and x2 < 8 and y2 > -1 and y2 < 8:
+                return True
+            else:
+                return False
+        else:
+            return False
 
 
 
