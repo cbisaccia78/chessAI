@@ -50,6 +50,11 @@ class Piece:
 
 
 
+#def mT(textmove):
+    #textmove of the form "knd4" for example
+
+
+
 
 
 class Empty(Piece):
@@ -66,13 +71,14 @@ class Knight(Piece):
         x = self.location[0]
         y = self.location[1]
         possibles = ()
+        """
         if x > 1: #x-2 > -1
             if y > 0:
                 possibles.append((x-2, y-1))
             if y < 7:
                 possibles.append((x-2, y+1))
         if x-1 > -1
-
+        """
     def legalPattern(xy):
         x1 = self.location[0]
         y1 = self.location[1]
@@ -139,7 +145,7 @@ class Pawn(Piece):
                     return False
 
             else:
-                return False:
+                return False
         elif y2-y1 == 2:
             if self.moved:
                 return False
@@ -261,29 +267,22 @@ class Game:
         y2 = move[2]
         square = self.game[x2][y2]
         if piece.legalPattern((x2, y2)):#can the piece move in that pattern?
-                if !(isinstance(square, Empty)): #is the square nonempty
+                if not isinstance(square, Empty): #is the square nonempty
                     if square.getColor() != piece.getColor(): #is it an enemy piece?
-                        if !(self.check(move): #does the move not put you in check?
+                        if not self.check(move): #does the move not put you in check?
                             return True
-                        else:
+                        else:#move puts you in check
                             return False
                     else: #friendly fire!
                         return False
                 else:
-                    if !(self.check(move)):
+                    if not self.check(move):
                         return True
-                    else:
+                    else:#move puts you in check
                         return False
-        else:
+        else:#piece cant move in that pattern
             return False
 
-
-        #if not does the move run into a friendly piece
-        #if not does the move leave you in check
-        #if not then you're good to go
-
-
-        return
 
     def movePiece(self,move):
         if(isLegal(move)):
