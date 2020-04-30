@@ -12,6 +12,7 @@ class Player:
         self.time = time
         self.color = "null" #initially set to null before random operator
         self.pieces = []
+        self.check = False
 
     def getName(self):
         return self.name
@@ -25,16 +26,18 @@ class Player:
     def getTime(self):
         return self.time
 
+    def inCheck(self):
+        return self.check
+
 class Piece:
-    def __init__(self, color, name, value, location):
+    def __init__(self, color, name, location):
         """empty = 0 pawn = 1 knight = 2 bishop = 3 rook = 4 queen = 5 king = 6 """
         self.color = color
         self.name = name
-        self.value = value
-        self.location = location
+        self.location = location  #  (x,y)    location[0] = x, location[1] = y
 
     def getName(self):
-        if self.value == 2 or self.value == 6:
+        if self.name == 'king' or self.name == 'knight':
             return self.name[0:2]
         else:
             return self.name[0:1]
@@ -42,8 +45,6 @@ class Piece:
     def getColor(self):
         return self.color
 
-    def getValue(self):
-        return self.value
 
     def getCoords(self):
         return self.location
@@ -58,15 +59,15 @@ class Piece:
 
 
 class Empty(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,location)
     def movesTo():
         return
 
 
 class Knight(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,location)
     def moves():
         x = self.location[0]
         y = self.location[1]
@@ -94,8 +95,8 @@ class Knight(Piece):
 
 
 class Bishop(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,location)
     def moves():
         return
 
@@ -122,8 +123,8 @@ class Bishop(Piece):
 
 
 class Pawn(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,location)
         self.moved = False
     def moves():
         return
@@ -163,8 +164,8 @@ class Pawn(Piece):
 
 
 class Rook(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,ocation)
     def moves():
         return
 
@@ -184,8 +185,8 @@ class Rook(Piece):
 
 
 class Queen(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,location)
     def moves():
         return
 
@@ -212,8 +213,8 @@ class Queen(Piece):
 
 
 class King(Piece):
-    def __init__(self,color,name,value,location):
-        super().__init__(color,name,value,location)
+    def __init__(self,color,name,location):
+        super().__init__(color,name,location)
     def moves():
         return
 
@@ -239,7 +240,7 @@ def color(i):
     else:
         return "black"
 
-class Game:
+class Game:                               #    Game.move([piece, x, y])      #move is defined as move = [piece, x, y]
     def __init__(self,time,p1name, p2name):
 
         self.p1 = Player(p1name, time)
@@ -253,10 +254,21 @@ class Game:
             self.p1.setColor("black")
             self.p2.setColor("white")
 
-        self.game = self.initializeGame()
+        self.game = self.initializeGame()    #   game[][]
 
 
-    def check(self, move): #check if a move puts yourself in check
+    def check(self, move, p): #check if a move puts yourself in check
+        if p.inCheck():#does the move take you out of check. may be more efficient
+            return
+        else:
+            xy = move[0].getCoords()
+            x0 = xy[0]
+            y0 = xy[1]
+            x1 = move[1]
+            y1 = move[2]
+            temp = self.game[x0][y0]
+            self.game[x1][y1] = temp
+            self.game[x0][y0] = Empty("null", "empty",(x0,y0))
         return
 
 
@@ -303,24 +315,24 @@ class Game:
         for i in range(0,8):
             row = []
             if i == 0 or i == 7:
-                row.append(Rook(color(i), "rook", 4, (i,0)))
-                row.append(Knight(color(i), "knight", 2,(i,1)))
-                row.append(Bishop(color(i), "bishop", 3,(i,2)))
+                row.append(Rook(color(i), "rook", (i,0)))
+                row.append(Knight(color(i), "knight",(i,1)))
+                row.append(Bishop(color(i), "bishop",(i,2)))
                 if i == 0:
-                    row.append(Queen(color(i), "queen", 5,(i,3)))
-                    row.append(King(color(i), "king", 6,(i,4)))
+                    row.append(Queen(color(i), "queen",(i,3)))
+                    row.append(King(color(i), "king",(i,4)))
                 else:
-                    row.append(King(color(i), "king", 6,(i,3)))
-                    row.append(Queen(color(i), "queen", 5,(i,4)))
-                row.append(Bishop(color(i), "bishop", 3,(i,5)))
-                row.append(Knight(color(i), "knight", 2,(i,6)))
-                row.append(Rook(color(i), "rook", 4,(i,7)))
+                    row.append(King(color(i), "king",(i,3)))
+                    row.append(Queen(color(i), "queen",(i,4)))
+                row.append(Bishop(color(i), "bishop",(i,5)))
+                row.append(Knight(color(i), "knight",(i,6)))
+                row.append(Rook(color(i), "rook",(i,7)))
             elif i == 1 or i == 6:
                 for j in range(0,8):
-                    row.append(Pawn(color(i), "pawn", 1,(i,j)))
+                    row.append(Pawn(color(i), "pawn",(i,j)))
             else:
                 for k in range(0,8):
-                    row.append(Empty("null", "empty", 0,(i,k)))
+                    row.append(Empty("null", "empty",(i,k)))
             game.append(row)
 
         return game
