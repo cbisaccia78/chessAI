@@ -257,7 +257,7 @@ class Game:                               #    Game.move([piece, x, y])      #mo
         self.game = self.initializeGame()    #   game[][]
 
 
-    def check(self, move, p): #check if a move puts yourself in check
+    def check(self, move): #check if a move puts yourself in check
         if p.inCheck():#does the move take you out of check. may be more efficient
             return
         else:
