@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body>
+
+
+
+
+<svg id = "contain" width = "800" height = "800">
+  <defs>
+    <filter id = "f1" x = "0" y = "0">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
+    </filter>
+
+  </defs>
+
+
+
+  <script>
+    var container = document.getElementById("contain");
+    var topLines = []
+    var sideLines = []
+    for (let i = 0; i < 8; i++){
+      console.log('i: ',i);
+      var topLine = document.createElementNS("http://www.w3.org/2000/svg", "line");
+      topLine.setAttribute("x1","0");
+      topLine.setAttribute("y1", (i*100).toString());
+      topLine.setAttribute("x2","800");
+      topLine.setAttribute("y2", (i*100).toString());
+      topLine.setAttribute("style","stroke:black");
+      topLines[topLines.length] = topLine;
+
+      for(let j = 0; j < 8; j++){
+        console.log('j: ', j);
+        var rect = document.createElementNS("http://www.w3.org/2000/svg", "rect");
+        if((i+j)%2==0){
+          rect.setAttribute("style","fill:white;");
+        }else{
+          rect.setAttribute("style","fill:brown;");
+        }
+        var xNum = i * 100;
+        var yNum = j * 100;
+        rect.setAttribute("x", xNum.toString());
+        rect.setAttribute("y", yNum.toString());
+        rect.setAttribute("width", "100");
+        rect.setAttribute("height", "100");
+        container.appendChild(rect);
+      }
+    }
+
+    for(let k = 0; k < 8; k++){
+      var sideLine = document.createElementNS("http://www.w3.org/2000/svg","line");
+      sideLine.setAttribute("x1",(k*100).toString());
+      sideLine.setAttribute("y1", "0");
+      sideLine.setAttribute("x2",(k*100).toString());
+      sideLine.setAttribute("y2", "800");
+      sideLine.setAttribute("style","stroke:black");
+      container.appendChild(sideLine)
+      sideLines[sideLines.length] = sideLine
+      container.appendChild(sideLine);
+      container.appendChild(topLines[k]);
+    }
+
+
+    var l = document.createElementNS("http://www.w3.org/2000/svg","line");
+    var r = document.createElementNS("http://www.w3.org/2000/svg","line");
+    var t = document.createElementNS("http://www.w3.org/2000/svg","line");
+    var b = document.createElementNS("http://www.w3.org/2000/svg","line");
+
+    l.setAttribute("x1","0");
+    l.setAttribute("y1","0");
+    l.setAttribute("x2","0");
+    l.setAttribute("y2","800");
+    l.setAttribute("style","stroke:black; stroke-width:3");
+
+    r.setAttribute("x1","800");
+    r.setAttribute("y1","0");
+    r.setAttribute("x2","800");
+    r.setAttribute("y2","800");
+    r.setAttribute("style","stroke:black; stroke-width:3");
+
+    t.setAttribute("x1","0");
+    t.setAttribute("y1","0");
+    t.setAttribute("x2","800");
+    t.setAttribute("y2","0");
+    t.setAttribute("style","stroke:black; stroke-width:3");
+
+    b.setAttribute("x1","0");
+    b.setAttribute("y1","800");
+    b.setAttribute("x2","800");
+    b.setAttribute("y2","800");
+    b.setAttribute("style","stroke:black; stroke-width:3");
+
+    container.appendChild(l);
+    container.appendChild(r);
+    container.appendChild(t);
+    container.appendChild(b);
+
+
+
+  </script>
+
+
+<image id = "a7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "0" y = "100"></image>
+<image id = "b7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "100" y = "100"></image>
+<image id = "c7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "200" y = "100"></image>
+<image id = "d7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "300" y = "100"></image>
+<image id = "e7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "400" y = "100"></image>
+<image id = "f7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "500" y = "100"></image>
+<image id = "g7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "600" y = "100"></image>
+<image id = "h7p" href = "http://localhost:3000/images/chess_pdt60.png" width = "100" height = "100" x = "700" y = "100"></image>
+<image id = "a8r" href = "http://localhost:3000/images/chess_rdt60.png" width = "100" height = "100" x = "0" y = "0"></image>
+<image id = "b8kn" href = "http://localhost:3000/images/chess_ndt60.png" width = "100" height = "100" x = "100" y = "0"></image>
+<image id = "c8b" href = "http://localhost:3000/images/chess_bdt60.png" width = "100" height = "100" x = "200" y = "0"></image>
+<image id = "d8q" href = "http://localhost:3000/images/chess_qdt60.png" width = "100" height = "100" x = "300" y = "0"></image>
+<image id = "e8k" href = "http://localhost:3000/images/chess_kdt60.png" width = "100" height = "100" x = "400" y = "0"></image>
+<image id = "f8b" href = "http://localhost:3000/images/chess_bdt60.png" width = "100" height = "100" x = "500" y = "0"></image>
+<image id = "g8kn" href = "http://localhost:3000/images/chess_ndt60.png" width = "100" height = "100" x = "600" y = "0"></image>
+<image id = "h8r" href = "http://localhost:3000/images/chess_rdt60.png" width = "100" height = "100" x = "700" y = "0"></image>
+
+<image id = "a2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "0" y = "600"></image>
+<image id = "b2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "100" y = "600"></image>
+<image id = "c2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "200" y = "600"></image>
+<image id = "d2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "300" y = "600"></image>
+<image id = "e2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "400" y = "600"></image>
+<image id = "f2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "500" y = "600"></image>
+<image id = "g2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "600" y = "600"></image>
+<image id = "h2p" href = "http://localhost:3000/images/chess_plt60.png" width = "100" height = "100" x = "700" y = "600"></image>
+<image id = "a1r" href = "http://localhost:3000/images/chess_rlt60.png" width = "100" height = "100" x = "0" y = "700"></image>
+<image id = "b1kn" href = "http://localhost:3000/images/chess_nlt60.png" width = "100" height = "100" x = "100" y = "700"></image>
+<image id = "c1b" href = "http://localhost:3000/images/chess_blt60.png" width = "100" height = "100" x = "200" y = "700"></image>
+<image id = "d1q" href = "http://localhost:3000/images/chess_qlt60.png" width = "100" height = "100" x = "300" y = "700"></image>
+<image id = "e1k" href = "http://localhost:3000/images/chess_klt60.png" width = "100" height = "100" x = "400" y = "700"></image>
+<image id = "f1b" href = "http://localhost:3000/images/chess_blt60.png" width = "100" height = "100" x = "500" y = "700"></image>
+<image id = "g1kn" href = "http://localhost:3000/images/chess_nlt60.png" width = "100" height = "100" x = "600" y = "700"></image>
+<image id = "h1r" href = "http://localhost:3000/images/chess_rlt60.png" width = "100" height = "100" x = "700" y = "700"></image>
+
+
+<script type = "module">
+import {Game} from "http://localhost:3000/js/StateManager.js"; //statemanager.js import
+var chessGame = new Game("5","cole","computer");
+chessGame.printGame();
+
+var timer = null;
+var clicked = false;
+var currentImage;
+var id;
+var lastX = 0;
+var lastY = 0;
+var cont = document.getElementById("contain");
+
+
+
+function dragEnter(event){
+  //check if the move is legal
+  return;
+
+}
+
+function dragLeave(event){
+  //event.target.parentNode.removeChild(event.target);
+  return;
+}
+
+function dragOver(event){
+  //highlight the square that is being dragged over
+  return;
+
+}
+
+function dragging(event){
+
+  //move the position of the piece to the current location of the pointer
+  if (clicked){
+    console.log('moving');
+    var x = event.clientX;
+    var y = event.clientY;
+    var im = document.querySelectorAll(`img[href='${currentImage}']`)[0];
+    im.setAttribute("x", x.toString());
+    im.setAttribute("y", y.toString());
+    //set coordinates of copy to original image coordinates +- delta of drag
+
+  }
+
+
+}
+
+
+
+function drop(event){
+  //clearInterval(timer)
+  clicked = false;
+  var x = event.clientX;
+  var y = event.clientY;
+  console.log('wants a drop at'.concat(x,y));
+  //if the drop is legal: then good
+  //else, revert the img coordinates to go back to lastX, lastY
+  console.log('drop!');
+
+}
+
+
+function dragStart(event){
+  //timer = setInterval(hello,50);
+  clicked = true;
+  var x = event.clientX;
+  var y = event.clientY;
+  lastX = x;
+  lastY = y;
+  console.log('start at'.concat(x,y));
+  var baseX = Math.floor(x / 100);
+  var baseY = Math.floor(y / 100);
+  var index = baseX*7 + baseY;
+  console.log(`(${baseX},${baseY})`);
+  currentImage = chessGame.game[baseY][baseX].url;
+  console.log(chessGame.game[baseY][baseX].getName());
+  console.log(`${currentImage}`);
+  //create copy of draggable image and make the old image slightly transparent
+
+
+  //event.dataTransfer.setDragImage(event.target, 50, 50);
+  //event.preventDefault();
+
+}
+
+
+/*
+while(!chessGame.checkMate()){
+     var move = getMove(chessGame);
+     chessGame.translateExecute(move);
+     chessGame.printGame();
+  }
+*/
+
+document.getElementById("contain").addEventListener("mousedown", dragStart);
+document.getElementById("contain").addEventListener("mouseup", drop);
+document.getElementById("contain").addEventListener("mouseover", dragEnter);
+document.getElementById("contain").addEventListener("mouseout", dragLeave);
+document.getElementById("contain").addEventListener("mousemove", dragging);
+
+
+
+</script>
+
+
+
+
+
+</svg>
+
+</body>
+</html>
