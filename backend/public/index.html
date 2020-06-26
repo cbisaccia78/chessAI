@@ -177,7 +177,9 @@ function dragging(event){
 
   //move the position of the piece to the current location of the pointer
   if (clicked){
-
+    if(id == 'Empty'){
+      return;
+    }
     var xx = event.clientX;
     var yy = event.clientY;
     var im = document.getElementById(id);
@@ -199,7 +201,7 @@ function dragging(event){
 
 function drop(event){
   //clearInterval(timer)
-  clicked = false;
+
   var x = event.clientX;
   var y = event.clientY;
   console.log('wants a drop at'.concat(x,y));
@@ -207,9 +209,13 @@ function drop(event){
   var baseX = (Math.floor(x / 100));
   var baseY = (Math.floor(y / 100));
   if(id == 'Empty'){
+    clicked = false;
     return;
   }
+  console.log(`moving to (${baseX},${baseY})`);
+  console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
   _piece = chessGame.movePiece([_piece, baseX, baseY]);
+  console.log(`${_piece.id} moving to (${_piece.location[0]},${_piece.location[1]})`);
   //_piece = chessGame.game[baseY][baseX];
   //after movePiece the coordinates of the chessGame reflect the move
   //currentImage.setAttribute('x', baseX.toString());
@@ -220,6 +226,7 @@ function drop(event){
   //if the drop is legal: then good
   //else, revert the img coordinates to go back to lastX, lastY
   console.log('drop!');
+  clicked = false;
   }
 
 
