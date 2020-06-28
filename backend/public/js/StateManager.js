@@ -39,7 +39,7 @@ class Piece{
         this.moved = false;
         this.url = "null";
         this.id = "null"
-        this.pieceLoc = -1;
+        this.pieceLoc = this.location[0] + 8;
       }
 
     getName(){
@@ -92,7 +92,7 @@ class Empty extends Piece {
 class Knight extends Piece{
     constructor(color,name,location){
         super(color,name,location);
-        this.pieceLoc = this.location[0];
+
         if(color === 'white'){
           this.url = "http://localhost:3000/images/Chess_nlt60.png"
           console.log(`x value `)
@@ -140,7 +140,7 @@ class Knight extends Piece{
 class Bishop extends Piece{
     constructor(color,name,location){
         super(color,name,location);
-        this.pieceLoc = this.location[0];
+
         if(color ==='white'){
           this.url = "http://localhost:3000/images/Chess_blt60.png"
           if(this.location[0] == 2){
@@ -245,7 +245,7 @@ class Pawn extends Piece{
     constructor(color,name,location, moved){
         super(color,name,location);
         this.moved = moved;
-        this.pieceLoc = this.location[0] + 8;
+        this.pieceLoc = this.location[0];
         if(color == 'white'){
           this.url = "http://localhost:3000/images/Chess_plt60.png"
           if(this.location[0] == 0){
@@ -315,6 +315,7 @@ class Pawn extends Piece{
                         console.log('friendly fire!');
                         return false;
                     }
+                    console.log(`true legal patern king coord ${game[0][4].id} ${game[2][4].id}`);
                     return true;
                 }
                 console.log('off the board');
@@ -353,6 +354,7 @@ class Pawn extends Piece{
 class Rook extends Piece{
     constructor(color,name,location){
         super(color,name,location);
+
         if(color === 'white'){
           this.url = "http://localhost:3000/images/Chess_rlt60.png"
           if(this.location[0] == 0){
@@ -475,6 +477,7 @@ class Rook extends Piece{
 class Queen extends Piece {
     constructor(color,name,location){
         super(color,name,location);
+
         if(color === 'white'){
           this.url = "http://localhost:3000/images/Chess_qlt60.png"
           this.id = "d1q"
@@ -646,6 +649,7 @@ class King extends Piece{
     constructor(color,name,location,moved){
         super(color,name,location);
         this.moved = moved;
+
         if(color === 'white'){
           this.url = "http://localhost:3000/images/Chess_klt60.png"
           this.id = "e1k"
@@ -792,6 +796,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
         if(move[0].legalPattern([x2,y2], this.game)){//can the piece move in that pattern?
             if(!this.selfCheck(move)){ //does the move not put you in check?
+              console.log(`true legal patern king coord ${this.game[0][4].id} ${this.game[2][4].id}`);
                 return true;
               }
             else{//move puts you in check
@@ -813,6 +818,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
         */
         if(this.isLegal(move)){
+
             var x0 = move[0].getCoords()[0];
             var y0 = move[0].getCoords()[1];
             console.log(`${move[0].id} at (${x0}, ${y0})`);
@@ -820,19 +826,31 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             var y1 = move[2];
             console.log(`(${x1}, ${y1})`);
             console.log(`${this.game[y1][x1].id}`)
+            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             this.game[y1][x1] = move[0].deepCopy();
             //console.log(`${this.game[y1][x1].id} post piece-switch at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
             //need to update player pieces
             this.game[y1][x1].location = [x1,y1];
             this.game[y1][x1].id = move[0].id;
             //console.log(`${this.game[y1][x1].id} post loc-switch at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
+            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             if(move[0].getColor() == 'white'){
+              console.log(`move[0] id = ${move[0].id}`);
               this.p1.pieces[move[0].pieceLoc].location = [x1,y1];
             }else{
+              console.log(`move[0] id = ${move[0].id} move[0] pieceloc = ${move[0].pieceLoc}`);
+              var l;
+              for(l = 0; l < 16; l++){
+                console.log(this.p2.pieces[l].location);
+              }
               this.p2.pieces[move[0].pieceLoc].location = [x1,y1];
             }
             //console.log(`${move[0].id} at (${move[0].getCoords()[0]}, ${move[0].getCoords()[1]})`);
+            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             this.game[y0][x0] = new Empty("null","empty",[x0,y0]);
+            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
+
+
             //console.log(`${this.game[y1][x1].id} post-empty at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
             //console.log('____________________________________________');
             /*

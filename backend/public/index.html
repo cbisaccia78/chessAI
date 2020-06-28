@@ -216,13 +216,14 @@ function drop(event){
   console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
   _piece = chessGame.movePiece([_piece, baseX, baseY]);
   console.log(`${_piece.id} moving to (${_piece.location[0]},${_piece.location[1]})`);
+  console.log(`${chessGame.game[0][4].id}`);
   //_piece = chessGame.game[baseY][baseX];
   //after movePiece the coordinates of the chessGame reflect the move
   //currentImage.setAttribute('x', baseX.toString());
   //currentImage.setAttribute('y', baseY.toString());
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
-
+  console.log(`${chessGame.game[0][4].id}`);
   //if the drop is legal: then good
   //else, revert the img coordinates to go back to lastX, lastY
   console.log('drop!');
@@ -238,6 +239,7 @@ function dragStart(event){
   clicked = true;
   var x = event.clientX;
   var y = event.clientY;
+  //console.log(`${chessGame.game[0][4].id}`);
   lastX = x;
   lastY = y;
   console.log('start at'.concat(x,y));
@@ -246,13 +248,13 @@ function dragStart(event){
   //var index = baseX*7 + baseY;
   console.log(`(${baseX},${baseY})`);
 
-  _piece = chessGame.game[baseY][baseX];
+  _piece = chessGame.game[baseY][baseX]; // if the piece is grabbed at 4,0 but the location is 4,2
 
   currentImageUrl = _piece.url;
   id = _piece.id;
   currentImage = document.getElementById(id);
-  console.log(_piece.getName());
-  console.log(`x coord: ${_piece.location[0]}`);
+  console.log(_piece.id);
+  console.log(`x coord: ${_piece.location[0]} y coord: ${_piece.location[1]}`);
   console.log(`${currentImageUrl}`);
   //create copy of draggable image and make the old image slightly transparent
 
