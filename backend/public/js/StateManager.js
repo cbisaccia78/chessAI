@@ -113,6 +113,7 @@ class Knight extends Piece{
 
     deepCopy(){
       var copy = new Knight(this.color,this.name,this.location);
+      copy.id = this.id;
       return copy;
     }
     moves(){
@@ -159,6 +160,7 @@ class Bishop extends Piece{
     }
     deepCopy(){
       var copy = new Bishop(this.color,this.name,this.location);
+      copy.id = this.id;
       return copy;
     }
     moves(){
@@ -289,6 +291,7 @@ class Pawn extends Piece{
     }
     deepCopy(){
       var copy = new Pawn(this.color,this.name,this.location,this.moved);
+      copy.id = this.id;
       return copy;
     }
     moves(){
@@ -373,6 +376,7 @@ class Rook extends Piece{
     }
     deepCopy(){
       var copy = new Rook(this.color,this.name,this.location,this.moved);
+      copy.id = this.id;
       return copy;
     }
     moves(){
@@ -488,6 +492,7 @@ class Queen extends Piece {
       }
     deepCopy(){
       var copy = new Queen(this.color,this.name,this.location);
+      copy.id = this.id;
       return copy;
     }
     moves(){
@@ -660,6 +665,7 @@ class King extends Piece{
       }
     deepCopy(){
       var copy = new King(this.color,this.name,this.location,this.moved);
+      copy.id = this.id;
       return copy;
     }
     moves(){
@@ -764,26 +770,37 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         var y0 = xy[1];
         var x1 = move[1];
         var y1 = move[2];
+        console.log(`(${x1}, ${y1})`);
         var temp0 = this.game[y0][x0].deepCopy();
         var temp1 = this.game[y1][x1].deepCopy();
+        console.log(`knight in selfCheck ${this.game[3][3].id} temp id = ${temp1.id} `);
         this.game[y1][x1] = this.game[y0][x0].deepCopy();
+        console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y1][x1].location = (x1, y1);
+        console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y0][x0] = new Empty("null", "empty",(x0,y0));
         var king = this.getKing(color);
         var kingcoords = (king.getCoords()[0], king.getCoords()[1]);
+        console.log(`knight in selfCheck ${this.game[3][3].id} `);
         var opposites = this.returnOpposingPieces(color);
-        for(var i = 0; i < 16; i++){
-            var piece = opposites[i]
-            if(piece.legalPattern(kingcoords,this.game)){
-                //undo move
-                this.game[y0][x0] = temp0.deepCopy();
-                this.game[y1][x1] = temp1.deepCopy();
-                return true;
-              }
+        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        opposites.forEach(element => {
+          if(element.legalPattern(kingcoords, this.game)){
+            console.log(`knight in selfCheck ${this.game[3][3].id} i = ${i}`);
+            //undo move
+            this.game[y0][x0] = temp0.deepCopy();
+            console.log(`knight in selfCheck ${this.game[3][3].id} `);
+            this.game[y1][x1] = temp1.deepCopy();
+            console.log(`knight in selfCheck ${this.game[3][3].id} `);
+            return true;
           }
+        });
+
         //undo move
         this.game[y0][x0] = temp0.deepCopy();
+        console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y1][x1] = temp1.deepCopy();
+        console.log(`knight in selfCheck ${this.game[3][3].id} `);
         return false;
 
     }
@@ -795,8 +812,9 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
 
         if(move[0].legalPattern([x2,y2], this.game)){//can the piece move in that pattern?
+          console.log(`knight after legalPattern ${this.game[3][3].id} `);
             if(!this.selfCheck(move)){ //does the move not put you in check?
-              console.log(`true legal patern king coord ${this.game[0][4].id} ${this.game[2][4].id}`);
+              console.log(`knight after selfcheck ${this.game[3][3].id}`);
                 return true;
               }
             else{//move puts you in check
@@ -827,6 +845,16 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             console.log(`(${x1}, ${y1})`);
             console.log(`${this.game[y1][x1].id}`)
             console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
+            var moveholder = [false,"Empty"];
+            if(this.game[y1][x1].id != "Empty"){
+              moveholder[0] = true;
+              moveholder[1] = this.game[y1][x1].id;
+              var temp = this.getPlayer(this.game[y1][x1].getColor()).pieces;
+              var front = temp.slice(0, this.game[y1][x1].pieceLoc);
+              temp.slice(this.game[y1][x1].pieceLoc + 1, 16).forEach(element => front.push(element));
+              this.getPlayer(this.game[y1][x1].getColor()).pieces = front;
+            }
+
             this.game[y1][x1] = move[0].deepCopy();
             //console.log(`${this.game[y1][x1].id} post piece-switch at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
             //need to update player pieces
@@ -839,10 +867,6 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
               this.p1.pieces[move[0].pieceLoc].location = [x1,y1];
             }else{
               console.log(`move[0] id = ${move[0].id} move[0] pieceloc = ${move[0].pieceLoc}`);
-              var l;
-              for(l = 0; l < 16; l++){
-                console.log(this.p2.pieces[l].location);
-              }
               this.p2.pieces[move[0].pieceLoc].location = [x1,y1];
             }
             //console.log(`${move[0].id} at (${move[0].getCoords()[0]}, ${move[0].getCoords()[1]})`);
@@ -859,7 +883,8 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             console.log(`${this.p2.pieces[2].id} at (${this.p2.pieces[2].location[0]}, ${this.p2.pieces[2].location[1]})`);
             console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
             */
-            return this.game[y1][x1];
+            moveholder.push(this.game[y1][x1]);
+            return moveholder;
           }
         else{
             //do not make the move, return control to color that attempted to make the move
@@ -872,7 +897,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             console.log(`${this.p2.pieces[2].id} at (${this.p2.pieces[2].location[0]}, ${this.p2.pieces[2].location[1]})`);
             console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
             */
-            return move[0];
+            return [false, "Empty",move[0]];
         }
       }
 
@@ -889,7 +914,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         y2 = yTranslate(moveString[3]);
 
 
-        this.movePiece([piece,x2,y2]);
+        //this.movePiece([piece,x2,y2], false]);
     }
 
     printGame(){
@@ -907,20 +932,20 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         var i;
         console.log('___________________________');
         for(i = 0; i < 16; i++){
-            console.log(this.p1.pieces[i].getName() + " ")
-            console.log(this.p2.pieces[i].getName() + "\n")
+            console.log(this.p1.pieces[i].id + " ")
+            console.log(this.p2.pieces[i].id + "\n")
           }
         console.log('___________________________');
     }
 
     reverse(){
-      var pawns = this.p2.pieces.slice(0,8);
-      var majors = this.p2.pieces.slice(8,16);
+      var majors = this.p2.pieces.slice(0,8);
+      var pawns = this.p2.pieces.slice(8,16);
       var j;
-      for(j = 0; j < 8; j++){
-        majors.push(pawns[j]);
+      for(j=0; j < 8; j++){
+        pawns.push(majors[j]);
       }
-      this.p2.pieces = majors;
+      this.p2.pieces = pawns;
       this.printPieces();
     }
     initializeGame(){
