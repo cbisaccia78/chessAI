@@ -181,57 +181,45 @@ class Bishop extends Piece{
             if(Math.abs((xdiff)/(ydiff)) == 1){//moves like bishop
                 if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                     //for each square on path to move, is there an empty square? if not false
-                    var reflect = 1;
-                    if ((xdiff/ydiff) < 0){
-                        reflect = -1;
+                    var reflectX = 1;
+                    var reflectY = 1;
+                    if(xdiff < 0){
+                        reflectX = -1;
                     }
-                    if(xdiff > 0){ //right down
-                        var x = x1+1;
-                        var y = y1 + reflect*1;
-                        while(x <= x2){
-                            var square = game[y][x];
-                            if(!(square.id == "Empty")){
-                                if(x == x2){
-                                    if(!(square.getColor() == this.getColor())){
-                                        return true;
-                                    }
-                                    return false;
+                    if(ydiff < 0){
+                      reflectY = -1;
+                    }
+
+                    var x = x1+reflectX;
+                    var y = y1 + reflectY;
+                    while(x != x2){
+                        console.log(`(${x}, ${y})`)
+                        var square = game[y][x];
+                        if(!(square.id == "Empty")){
+                            if(x == x2){
+                                if(!(square.getColor() == this.getColor())){
+                                    return true;
                                 }
                                 return false;
                             }
-                            x = x+1;
-                            y = y + reflect*1;
+                            return false;
                         }
-                        return true;
+                        x = x+reflectX;
+                        y = y + reflectY;
                     }
-                    else{
-                        var x = x1-1;
-                        var y = y1 - reflect*1;
-                        while(x >= x2){
-                            //console.log(`bishop at (${game[y1][x1].location[0]}, ${game[y1][x1].location[1]})`);
-                            //console.log(`(${x}, ${y})`);
-                            var square = game[y][x];
-                            if(!(square.id = "Empty")){
-                                if(x == x2){
-                                    if(!(square.getColor() == this.getColor())){
-                                        return true;
-                                    }
-                                    return false;
-                                }
-                                return false;
-                            }
-                            x = x-1;
-                            y = y - reflect*1;
-                        }
-                        return true;
-                    return true;
-                  }
+                    if(!(game[y][x].getColor() == this.getColor())){
+                      return true;
+                    }
+                    console.log('color issue');
+                    return false;
+
+
                 }
-                else{
+                else{//off the board
                     return false;
                 }
             }
-            else{
+            else{//wrong abs value
                 return false;
             }
         }else{ //if it doesnt move like a bishop
@@ -391,83 +379,64 @@ class Rook extends Piece{
         if((ydiff == 0) != (xdiff == 0)){ //moves like rook
             if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                 //for each square on path to move, is there an empty square or do you run into a piece? if not good to go
+                var reflectX = 1;
+                var reflectY = 1;
                 if(xdiff != 0){ //moving horizontally
-                    if(xdiff > 0){ //moving to the right
-                        var x1plus = x1+1;
-                        while(x1plus <= x2){ //before you reach your move
-                            var square = game[y1][x1plus];
-                            if(!(square.id = "Empty")){ //is the current square empty
-                                if(x1plus == x2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
-                                  }
-                                return false; //piece in the way
-                              }
-                            x1plus = x1plus+1;
-                        }
-                        return true;
+                    if(xdiff < 0){
+                      reflectX = -1;
                     }
-                    else{
-                        var x1minus = x1-1
-                        while(x1minus >= x2){ //before you reach your move
-                            var square = game[y1][x1minus]
-                            if (!(square.id = "Empty")){ //is the current square empty
-                                if(x1minus == x2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
+
+                    var x = x1+reflectX;
+                    while(x != x2){ //before you reach your move
+                        var square = game[y1][x];
+                        if(!(square.id == "Empty")){ //is the current square empty
+                            if(x == x2){//reached destination
+                                if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
+                                    return true;
                                   }
-                                return false; //piece in the way
+                                return false; //friendly fire
                               }
-                            x1minus = x1minus-1;
+                            return false; //piece in the way
                           }
-                        return true;
-                      }
-                  }
-                else{//moving vertically
-                    if(ydiff > 0){ //moving to the right
-                        var y1plus = y1+1;
-                        while(y1plus <= y2){ //before you reach your move
-                            var square = game[y1plus][x1];
-                            if(!(square.id = "Empty")){ //is the current square empty
-                                if(y1plus == y2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
-                                  }
-                                return false //piece in the way
-                              }
-                            y1plus = y1plus+1;
-                          }
-                        return true;
-                      }
-                    else{
-                        var y1minus = y1-1
-                        while(y1minus >= y2){ //before you reach your move
-                            var square = game[y1minus][x1];
-                            if(!(square.id = "Empty")){ //is the current square empty
-                                if(y1minus == y2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
-                                  }
-                                return false; //piece in the way
-                              }
-                            y1minus = y1minus-1
-                        return true;
-                          }
-                      }
+                        x = x+reflectX;
+                    }
+                    if(!(game[y1][x].getColor() == this.getColor())){
+                      return true;
+                    }
+                    return false;
+
+
                 }
-              }
+                else{//moving vertically
+                    if(ydiff < 0){
+                      reflectY = -1;
+                    }
+
+                    var y = y1+1;
+                    while(y != y2){ //before you reach your move
+                        var square = game[y][x1];
+                        if(!(square.id == "Empty")){ //is the current square empty
+                            if(y == y2){//reached destination
+                                if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
+                                    return true;
+                                  }
+                                return false; //friendly fire
+                              }
+                            return false //piece in the way
+                          }
+                        y = y+1;
+                      }
+                    if(!(game[y][x1].getColor() == this.getColor())){
+                      return true;
+                    }
+                    return false;
+
+                }
+            }
             else{//off the board
                 return false;
               }
-          }
+        }
         else{ //if it doesnt move like a rook
             return false;
         }
@@ -521,7 +490,7 @@ class Queen extends Piece {
                     var x = x1+reflectX;
                     while(x != x2){ //before you reach your move
                         var square = game[y1][x];
-                        if(!(square.id = "Empty")){ //is the current square empty
+                        if(!(square.id == "Empty")){ //is the current square empty
                             if(x == x2){//reached destination
                                 if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
                                     return true;
@@ -548,9 +517,9 @@ class Queen extends Piece {
 
                     var y = y1+reflectY;
                     while(y != y2){ //before you reach your move
-                      console.log(`${y}, ${x1}`);
+                      console.log(`${x1}, ${y} ${game[y][x1].id}`);
                         var square = game[y][x1];
-                        if(!(square.id = "Empty")){ //is the current square empty
+                        if(!(square.id == "Empty")){ //is the current square empty
                           console.log('detected piece');
                             if(y == y2){//reached destination
                                 if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
@@ -596,7 +565,7 @@ class Queen extends Piece {
                       while(x != x2){
                           console.log(`${x}, ${y}`);
                           var square = game[y][x];
-                          if(!(square.id = "Empty")){
+                          if(!(square.id == "Empty")){
                               console.log('623');
                               if(x == x2){
                                   if(!(square.getColor() == this.getColor())){
