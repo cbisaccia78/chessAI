@@ -124,6 +124,7 @@ class Knight extends Piece{
         var y1 = this.location[1];
         var x2 = xy[0];
         var y2 = xy[1];
+
         if (((x2-x1)*(x2-x1) + (y2-y1)*(y2-y1)) == 5){
             if (x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                 if (game[y2][x2].getColor() == this.getColor()){
@@ -615,6 +616,7 @@ class King extends Piece{
     constructor(color,name,location,moved){
         super(color,name,location);
         this.moved = moved;
+        this.justCastled = false;
 
         if(color === 'white'){
           this.url = "http://localhost:3000/images/Chess_klt60.png"
@@ -627,6 +629,7 @@ class King extends Piece{
     deepCopy(){
       var copy = new King(this.color,this.name,this.location,this.moved);
       copy.id = this.id;
+      copy.justCastled = this.justCastled;
       return copy;
     }
     moves(){
@@ -638,8 +641,9 @@ class King extends Piece{
         var y1 = this.location[1]
         var x2 = xy[0];
         var y2 = xy[1];
-
-        if(((x2-x1)*(x2-x2) + (y2-y1)*(y2-y1) <=2) && !(x2-x1==0 && y2-y1==0)){
+        var xdiff = x2-x1;
+        var ydiff = y2-y1;
+        if(((xdiff)*(xdiff) + (ydiff)*(ydiff) <=2) && !(xdiff==0 && ydiff==0)){
             if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                 if(game[y2][x2].getColor() == this.getColor()){
                     return false;
@@ -650,6 +654,52 @@ class King extends Piece{
                 return false;
               }
           }
+        else if((xdiff == 2 || xdiff == -2) && ydiff == 0){
+          //check for castling
+          if(this.moved == true){
+            return false;
+          }
+          var reflectX = 1;
+          if(xdiff < 0){
+            reflectX = -1;
+          }
+          if(this.getColor() == "white"){
+            if(reflectX == -1){
+              if(!(game[0][7].name == "rook" && game[0][7].moved == false)){
+                return false;
+              }
+            }else{
+              if(!(game[7][7].name == "rook" && game[7][7].moved == false)){
+                return false;
+              }
+            }
+          }else{
+            if(reflectX == -1){
+              if(!(game[0][0].name == "rook" && game[0][0].moved == false)){
+                return false;
+              }
+            }else{
+              if(!(game[0][7].name == "rook" && game[0][7].moved == false)){
+                return false;
+              }
+            }
+          }
+
+
+          var x = x1 + reflectX;
+          var y = 7;
+          if(this.color == "black"){
+            y = 0;
+          }
+          while(x != x2){
+            if(game[y][x].name != "empty"){
+              return false;
+            }
+            x = x + reflectX;
+          }
+          this.justCastled = true;
+          return true;
+        }
         else{
             return false;
           }
@@ -818,6 +868,8 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
               this.getPlayer(this.game[y1][x1].getColor()).pieces = front;
             }
 
+
+
             this.game[y1][x1] = move[0].deepCopy();
             //console.log(`${this.game[y1][x1].id} post piece-switch at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
             //need to update player pieces
@@ -834,10 +886,41 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
               this.p2.pieces[move[0].pieceLoc].location = [x1,y1];
             }
 
-            if(this.game[y1][x1].name == "king" || this.game[y1][x1].name == "rook" || this.game[y1][x1].name == "pawn"){
+            if(this.game[y1][x1].name == "king" || this.game[y1][x1].name == "rook" || this.game[y1][x1].name == "pawn"){//special piece moves
               //handle king, castle, and pawn "moved" updates here
-              this.game[y1][x1].moved = true;
+              this.game[y1][x1].moved = true; //need to find a way to also set castle move to true
+              if(this.game[y1][x1].name == "king" && this.game[y1][x1].justCastled == "true"){
+                if(move[0].getColor() == "white"){
+                  if(x1-x0 < 0){
+                    this.game[3][7] = this.game[0][7].deepCopy();
+                    this.game[3][7].location = [3,7];
+                    moveholder.push(this.game[3][7]);
+                    this.game[0][7] = new Empty("null", "empty", [0,7]);
+                  }else{
+                    this.game[5][7] = this.game[7][7].deepCopy();
+                    this.game[5][7].location = [5,7];
+                    moveholder.push(this.game[5][7]);
+                    this.game[7][7] = new Empty("null", "empty", [7,7]);
+                  }
+                }else{
+                  if(x1-x0 < 0){
+                    this.game[3][0] = this.game[0][0].deepCopy();
+                    this.game[3][0].location = [3,0];
+                    moveholder.push(this.game[3][0]);
+                    this.game[0][0] = new Empty("null", "empty", [0,0]);
+                  }else{
+                    this.game[5][0] = this.game[7][0].deepCopy();
+                    this.game[5][0].location = [5,0];
+                    moveholder.push(this.game[5][0])
+                    this.game[7][0] = new Empty("null", "empty", [7,0]);
+                  }
+                }
+                this.game[y1][x1].justCastled = false;
+
+              }
             }
+
+
             //console.log(`${move[0].id} at (${move[0].getCoords()[0]}, ${move[0].getCoords()[1]})`);
             //console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             this.game[y0][x0] = new Empty("null","empty",[x0,y0]);

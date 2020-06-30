@@ -216,6 +216,12 @@ function drop(event){
   console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
   var move = chessGame.movePiece([_piece, baseX, baseY]);
   _piece = move[2];
+  var rook;
+  if(move.length == 4){
+    console.log('castling');
+    _piece = move[3];
+    rook = move[2];
+  }
   console.log(`${_piece.id} moving to (${_piece.location[0]},${_piece.location[1]})`);
   console.log(`${chessGame.game[0][4].id}`);
   //_piece = chessGame.game[baseY][baseX];
@@ -225,11 +231,15 @@ function drop(event){
   if(move[0] == true){
     console.log(`removing child with id ${move[1]}`);
     document.getElementById(move[1]).setAttribute("style", "visibility:hidden");
-    
-
   }
+
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
+  if(move.length == 4){
+    var rookImage = document.getElementById(rook.id);
+    rookImage.setAttribute('x', ((rook.location[0])*100).toString());
+    rookImage.setAttribute('y', ((rook.location[1])*100).toString());
+  }
   console.log(`${chessGame.game[0][4].id}`);
   //if the drop is legal: then good
   //else, revert the img coordinates to go back to lastX, lastY
