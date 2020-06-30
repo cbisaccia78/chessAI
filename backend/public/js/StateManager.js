@@ -774,7 +774,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
     }
 
 
-    selfCheck(move){ //check if a move puts yourthis in check
+    selfCheck(move){ //check if a move puts yourself in check
         var xy = move[0].getCoords();
         var color = move[0].getColor();
         var x0 = xy[0];
@@ -849,7 +849,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
         */
         if(this.isLegal(move)){
-
+            console.log(`0,0 ${this.game[0][0].id} 0,7 ${this.game[0][7].id} 7,0 ${this.game[7][0].id} 7,7 ${this.game[7][7].id}`);
             var x0 = move[0].getCoords()[0];
             var y0 = move[0].getCoords()[1];
             console.log(`${move[0].id} at (${x0}, ${y0})`);
@@ -887,32 +887,36 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             }
 
             if(this.game[y1][x1].name == "king" || this.game[y1][x1].name == "rook" || this.game[y1][x1].name == "pawn"){//special piece moves
+              //console.log('king rook or pawn');
               //handle king, castle, and pawn "moved" updates here
               this.game[y1][x1].moved = true; //need to find a way to also set castle move to true
-              if(this.game[y1][x1].name == "king" && this.game[y1][x1].justCastled == "true"){
+              //console.log(`${this.game[y1][x1].name} ${this.game[y1][x1].justCastled}`);
+              if(this.game[y1][x1].name == "king" && this.game[y1][x1].justCastled == true){
+                console.log('king justCastled true');
+
                 if(move[0].getColor() == "white"){
                   if(x1-x0 < 0){
-                    this.game[3][7] = this.game[0][7].deepCopy();
-                    this.game[3][7].location = [3,7];
-                    moveholder.push(this.game[3][7]);
-                    this.game[0][7] = new Empty("null", "empty", [0,7]);
+                    this.game[7][3] = this.game[7][0].deepCopy();
+                    this.game[7][3].location = [3,7];
+                    moveholder.push(this.game[7][3]);
+                    this.game[7][0] = new Empty("null", "empty", [0,7]);
                   }else{
-                    this.game[5][7] = this.game[7][7].deepCopy();
-                    this.game[5][7].location = [5,7];
-                    moveholder.push(this.game[5][7]);
+                    this.game[7][5] = this.game[7][7].deepCopy();
+                    this.game[7][5].location = [5,7];
+                    moveholder.push(this.game[7][5]);
                     this.game[7][7] = new Empty("null", "empty", [7,7]);
                   }
                 }else{
                   if(x1-x0 < 0){
-                    this.game[3][0] = this.game[0][0].deepCopy();
-                    this.game[3][0].location = [3,0];
-                    moveholder.push(this.game[3][0]);
+                    this.game[0][3] = this.game[0][0].deepCopy();
+                    this.game[0][3].location = [3,0];
+                    moveholder.push(this.game[0][3]);
                     this.game[0][0] = new Empty("null", "empty", [0,0]);
                   }else{
-                    this.game[5][0] = this.game[7][0].deepCopy();
-                    this.game[5][0].location = [5,0];
-                    moveholder.push(this.game[5][0])
-                    this.game[7][0] = new Empty("null", "empty", [7,0]);
+                    this.game[0][5] = this.game[0][7].deepCopy();
+                    this.game[0][5].location = [5,0];
+                    moveholder.push(this.game[0][5])
+                    this.game[0][7] = new Empty("null", "empty", [7,0]);
                   }
                 }
                 this.game[y1][x1].justCastled = false;
