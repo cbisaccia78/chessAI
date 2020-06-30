@@ -190,7 +190,7 @@ class Bishop extends Piece{
                         var y = y1 + reflect*1;
                         while(x <= x2){
                             var square = game[y][x];
-                            if(!(square instanceof Empty)){
+                            if(!(square.id == "Empty")){
                                 if(x == x2){
                                     if(!(square.getColor() == this.getColor())){
                                         return true;
@@ -211,7 +211,7 @@ class Bishop extends Piece{
                             //console.log(`bishop at (${game[y1][x1].location[0]}, ${game[y1][x1].location[1]})`);
                             //console.log(`(${x}, ${y})`);
                             var square = game[y][x];
-                            if(!(square instanceof Empty)){
+                            if(!(square.id = "Empty")){
                                 if(x == x2){
                                     if(!(square.getColor() == this.getColor())){
                                         return true;
@@ -314,12 +314,11 @@ class Pawn extends Piece{
         if((ydiff == 1 && this.getColor() == 'white') || (ydiff == -1 && this.getColor() == 'black')){
             if(xdiff == -1 || xdiff == 0 || xdiff == 1){
                 if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
-                    if(game[y2][x2].getColor() == this.getColor()){
-                        console.log('friendly fire!');
-                        return false;
+                    if((game[y2][x2].getColor() == "null" && xdiff == 0) || (game[y2][x2].getColor() != "null" && (game[y2][x2].getColor() != this.getColor()) && xdiff != 0)){
+                        return true;
                     }
                     console.log(`true legal patern king coord ${game[0][4].id} ${game[2][4].id}`);
-                    return true;
+                    return false;
                 }
                 console.log('off the board');
                 return false;
@@ -397,7 +396,7 @@ class Rook extends Piece{
                         var x1plus = x1+1;
                         while(x1plus <= x2){ //before you reach your move
                             var square = game[y1][x1plus];
-                            if(!(square instanceof Empty)){ //is the current square empty
+                            if(!(square.id = "Empty")){ //is the current square empty
                                 if(x1plus == x2){//reached destination
                                     if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
                                         return true;
@@ -414,7 +413,7 @@ class Rook extends Piece{
                         var x1minus = x1-1
                         while(x1minus >= x2){ //before you reach your move
                             var square = game[y1][x1minus]
-                            if (!(square instanceof Empty)){ //is the current square empty
+                            if (!(square.id = "Empty")){ //is the current square empty
                                 if(x1minus == x2){//reached destination
                                     if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
                                         return true;
@@ -433,7 +432,7 @@ class Rook extends Piece{
                         var y1plus = y1+1;
                         while(y1plus <= y2){ //before you reach your move
                             var square = game[y1plus][x1];
-                            if(!(square instanceof Empty)){ //is the current square empty
+                            if(!(square.id = "Empty")){ //is the current square empty
                                 if(y1plus == y2){//reached destination
                                     if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
                                         return true;
@@ -450,7 +449,7 @@ class Rook extends Piece{
                         var y1minus = y1-1
                         while(y1minus >= y2){ //before you reach your move
                             var square = game[y1minus][x1];
-                            if(!(square instanceof Empty)){ //is the current square empty
+                            if(!(square.id = "Empty")){ //is the current square empty
                                 if(y1minus == y2){//reached destination
                                     if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
                                         return true;
@@ -505,82 +504,72 @@ class Queen extends Piece {
         var x2 = xy[0];
         var y2 = xy[1];
         var xdiff = x2-x1;
-        var ydiff = y2-y1;
+        var ydiff = (y2-y1);
+
+
 
         if((ydiff == 0) != (xdiff == 0)){ //moves like rook
             if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                 //for each square on path to move, is there an empty square or do you run into a piece? if not good to go
+                var reflectX = 1;
+                var reflectY = 1;
+
                 if(xdiff != 0){ //moving horizontally
-                    if(xdiff > 0){ //moving to the right
-                        var x1plus = x1+1;
-                        while(x1plus <= x2){ //before you reach your move
-                            var square = game[y1][x1plus];
-                            if(!(square instanceof Empty)){ //is the current square empty
-                                if(x1plus == x2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
-                                  }
-                                return false; //piece in the way
-                              }
-                            x1plus = x1plus+1;
-                        }
-                        return true;
+                    if(xdiff < 0){
+                      reflectX = -1;
                     }
-                    else{
-                        var x1minus = x1-1
-                        while(x1minus >= x2){ //before you reach your move
-                            var square = game[y1][x1minus];
-                            if (!(square instanceof Empty)){ //is the current square empty
-                                if(x1minus == x2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
+                    var x = x1+reflectX;
+                    while(x != x2){ //before you reach your move
+                        var square = game[y1][x];
+                        if(!(square.id = "Empty")){ //is the current square empty
+                            if(x == x2){//reached destination
+                                if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
+                                    return true;
                                   }
-                                return false; //piece in the way
+                                console.log(`friendly fire ${square.id}`);
+                                return false; //friendly fire
+
                               }
-                            x1minus = x1minus-1;
+                            console.log(`piece blocking ${square.id}`);
+                            return false; //piece in the way
+
                           }
-                        return true;
-                      }
+                        x = x+reflectX;
+                    }
+                    if(!(game[y1][x].getColor() == this.getColor())){
+                      return true;
+                    }
+                    return false;
                   }
                 else{//moving vertically
-                    if(ydiff > 0){ //moving to the right
-                        var y1plus = y1+1;
-                        while(y1plus <= y2){ //before you reach your move
-                            var square = game[y1plus][x1];
-                            if(!(square instanceof Empty)){ //is the current square empty
-                                if(y1plus == y2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
+                    if(ydiff < 0){
+                      reflectY = -1;
+                    }
+
+                    var y = y1+reflectY;
+                    while(y != y2){ //before you reach your move
+                      console.log(`${y}, ${x1}`);
+                        var square = game[y][x1];
+                        if(!(square.id = "Empty")){ //is the current square empty
+                          console.log('detected piece');
+                            if(y == y2){//reached destination
+                                if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
+                                    return true;
                                   }
-                                return false //piece in the way
+                                console.log(`friendly fire ${square.id}`);
+                                return false; //friendly fire
+
                               }
-                            y1plus = y1plus+1;
+                            console.log(`piece in way ${square.id}`);
+                            return false; //piece in the way
                           }
-                        return true;
+                        y = y+reflectY;
                       }
-                    else{
-                        var y1minus = y1-1
-                        while(y1minus >= y2){ //before you reach your move
-                            var square = game[y1minus][x1];
-                            if(!(square instanceof Empty)){ //is the current square empty
-                                if(y1minus == y2){//reached destination
-                                    if(!(square.getColor() == this.getColor())){ //if destination square contains an enemy piece
-                                        return true;
-                                      }
-                                    return false; //friendly fire
-                                  }
-                                return false; //piece in the way
-                              }
-                            y1minus = y1minus-1
-                        return true;
-                          }
-                      }
+                    if(!(game[y][x1].getColor() == this.getColor())){
+                      return true;
+                    }
+                    return false;
+
                 }
               }
             else{//off the board
@@ -589,60 +578,63 @@ class Queen extends Piece {
           }
           else if(ydiff != 0){ //
               if(Math.abs((xdiff)/(ydiff)) == 1){//moves like bishop
+                console.log('moves like a bishop')
                   if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                       //for each square on path to move, is there an empty square? if not false
-                      var reflect = 1;
-                      if ((xdiff/ydiff) < 0){
-                          reflect = -1;
+                      console.log('607');
+                      var reflectX = 1;
+                      var reflectY = 1
+                      if (xdiff < 0){
+                          reflectX = -1;
                       }
-                      if(xdiff > 0){ //right down
-                          var x = x1+1;
-                          var y = y1 + reflect*1;
-                          while(x <= x2){
-                              var square = game[y][x];
-                              if(!(square instanceof Empty)){
-                                  if(x == x2){
-                                      if(!(square.getColor() == this.getColor())){
-                                          return true;
-                                      }
-                                      return false;
+                      if (ydiff < 0){
+                        reflectY = -1;
+                      }
+
+                      var x = x1+reflectX;
+                      var y = y1 + reflectY;
+                      while(x != x2){
+                          console.log(`${x}, ${y}`);
+                          var square = game[y][x];
+                          if(!(square.id = "Empty")){
+                              console.log('623');
+                              if(x == x2){
+                                  if(!(square.getColor() == this.getColor())){
+                                      console.log('good to go!');
+                                      return true;
                                   }
+                                  console.log(`friendly fire ${square.id}`);
                                   return false;
                               }
-                              x = x+1;
-                              y = y + reflect*1;
+                              console.log(`piece in way ${square.id}`);
+                              return false;
                           }
-                          return true;
+                          console.log('hello');
+                          x = x + reflectX;
+                          y = y + reflectY;
+                          console.log(`(${x},${y})`);
                       }
-                      else{
-                          var x = x1-1;
-                          var y = y1 + reflect*1;
-                          while(x >= x2){
-                              var square = game[y][x];
-                              if(!(square instanceof Empty)){
-                                  if(x == x2){
-                                      if(!(square.getColor() == this.getColor())){
-                                          return true;
-                                      }
-                                      return false;
-                                  }
-                                  return false;
-                              }
-                              x = x-1;
-                              y = y + reflect*1;
-                          }
-                          return true;
-                      return true;
-                    }
+                      console.log(`${game[y][x].id}`);
+                      if(!(game[y][x].getColor() == this.getColor())){
+                        console.log('good to go');
+                        return true;
+                      }
+                      return false;
+
+
+
                   }
                   else{
+                    console.log('off the board');
                       return false;
                   }
               }
               else{
+                console.log('doesnt move like bishop')
                   return false;
               }
           }else{ //if it doesnt move like a bishop or rook
+            console.log('doesnt move like rook or bishop');
               return false;
           }
 
@@ -773,34 +765,34 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         console.log(`(${x1}, ${y1})`);
         var temp0 = this.game[y0][x0].deepCopy();
         var temp1 = this.game[y1][x1].deepCopy();
-        console.log(`knight in selfCheck ${this.game[3][3].id} temp id = ${temp1.id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} temp id = ${temp1.id} `);
         this.game[y1][x1] = this.game[y0][x0].deepCopy();
-        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y1][x1].location = (x1, y1);
-        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y0][x0] = new Empty("null", "empty",(x0,y0));
         var king = this.getKing(color);
         var kingcoords = (king.getCoords()[0], king.getCoords()[1]);
-        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         var opposites = this.returnOpposingPieces(color);
-        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         opposites.forEach(element => {
           if(element.legalPattern(kingcoords, this.game)){
-            console.log(`knight in selfCheck ${this.game[3][3].id} i = ${i}`);
+            //console.log(`knight in selfCheck ${this.game[3][3].id} i = ${i}`);
             //undo move
             this.game[y0][x0] = temp0.deepCopy();
-            console.log(`knight in selfCheck ${this.game[3][3].id} `);
+            //console.log(`knight in selfCheck ${this.game[3][3].id} `);
             this.game[y1][x1] = temp1.deepCopy();
-            console.log(`knight in selfCheck ${this.game[3][3].id} `);
+            //console.log(`knight in selfCheck ${this.game[3][3].id} `);
             return true;
           }
         });
 
         //undo move
         this.game[y0][x0] = temp0.deepCopy();
-        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y1][x1] = temp1.deepCopy();
-        console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         return false;
 
     }
@@ -812,9 +804,10 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
 
         if(move[0].legalPattern([x2,y2], this.game)){//can the piece move in that pattern?
-          console.log(`knight after legalPattern ${this.game[3][3].id} `);
+          //console.log(`knight after legalPattern ${this.game[3][3].id} `);
             if(!this.selfCheck(move)){ //does the move not put you in check?
-              console.log(`knight after selfcheck ${this.game[3][3].id}`);
+              //console.log(`knight after selfcheck ${this.game[3][3].id}`);
+              console.log('legal pattern')
                 return true;
               }
             else{//move puts you in check
@@ -822,6 +815,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
                 return false;
               }
           }
+        console.log('illegal patern');
         return false;
 
       }
@@ -844,7 +838,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             var y1 = move[2];
             console.log(`(${x1}, ${y1})`);
             console.log(`${this.game[y1][x1].id}`)
-            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
+            //console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             var moveholder = [false,"Empty"];
             if(this.game[y1][x1].id != "Empty"){
               moveholder[0] = true;
@@ -861,18 +855,24 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             this.game[y1][x1].location = [x1,y1];
             this.game[y1][x1].id = move[0].id;
             //console.log(`${this.game[y1][x1].id} post loc-switch at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
-            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
+            //console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             if(move[0].getColor() == 'white'){
               console.log(`move[0] id = ${move[0].id}`);
               this.p1.pieces[move[0].pieceLoc].location = [x1,y1];
+
             }else{
               console.log(`move[0] id = ${move[0].id} move[0] pieceloc = ${move[0].pieceLoc}`);
               this.p2.pieces[move[0].pieceLoc].location = [x1,y1];
             }
+
+            if(this.game[y1][x1].name == "king" || this.game[y1][x1].name == "rook" || this.game[y1][x1].name == "pawn"){
+              //handle king, castle, and pawn "moved" updates here
+              this.game[y1][x1].moved = true;
+            }
             //console.log(`${move[0].id} at (${move[0].getCoords()[0]}, ${move[0].getCoords()[1]})`);
-            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
+            //console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
             this.game[y0][x0] = new Empty("null","empty",[x0,y0]);
-            console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
+            //console.log(`true legal patern king coord (${this.game[0][4].location[0]}, ${this.game[0][4].location[1]}) `);
 
 
             //console.log(`${this.game[y1][x1].id} post-empty at (${this.game[y1][x1].location[0]}, ${this.game[y1][x1].location[1]})`);
