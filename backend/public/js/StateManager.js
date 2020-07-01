@@ -788,6 +788,51 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         this.game[y1][x1] = this.game[y0][x0].deepCopy();
         //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y1][x1].location = (x1, y1);
+        //castling goes here
+
+          //console.log('king rook or pawn');
+          //handle king, castle, and pawn "moved" updates here
+          //console.log(`${this.game[y1][x1].name} ${this.game[y1][x1].justCastled}`);
+        var tempRook;
+
+        if(this.game[y1][x1].name == "king" && this.game[y1][x1].justCastled == true){
+          console.log('king justCastled true');
+          var tempRook;
+          var tempKing;
+
+          if(move[0].getColor() == "white"){
+            if(x1-x0 < 0){
+              tempRook = this.game[7][0];
+              this.game[7][3] = this.game[7][0].deepCopy();
+              this.game[7][3].location = [3,7];
+              moveholder.push(this.game[7][3]);
+              this.game[7][0] = new Empty("null", "empty", [0,7]);
+            }else{
+              tempRook = this.game[7][7];
+              this.game[7][5] = this.game[7][7].deepCopy();
+              this.game[7][5].location = [5,7];
+              moveholder.push(this.game[7][5]);
+              this.game[7][7] = new Empty("null", "empty", [7,7]);
+            }
+          }else{
+            if(x1-x0 < 0){
+              tempRook = this.game[0][0];
+              this.game[0][3] = this.game[0][0].deepCopy();
+              this.game[0][3].location = [3,0];
+              moveholder.push(this.game[0][3]);
+              this.game[0][0] = new Empty("null", "empty", [0,0]);
+            }else{
+              tempRook = this.game[0][7];
+              this.game[0][5] = this.game[0][7].deepCopy();
+              this.game[0][5].location = [5,0];
+              moveholder.push(this.game[0][5])
+              this.game[0][7] = new Empty("null", "empty", [7,0]);
+            }
+          }
+
+        }
+
+
         //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y0][x0] = new Empty("null", "empty",(x0,y0));
         var king = this.getKing(color);
@@ -803,6 +848,10 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             //console.log(`knight in selfCheck ${this.game[3][3].id} `);
             this.game[y1][x1] = temp1.deepCopy();
             //console.log(`knight in selfCheck ${this.game[3][3].id} `);
+            if(king.justCastled == true){
+              
+            }
+
             return true;
           }
         });
@@ -812,6 +861,9 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         //console.log(`knight in selfCheck ${this.game[3][3].id} `);
         this.game[y1][x1] = temp1.deepCopy();
         //console.log(`knight in selfCheck ${this.game[3][3].id} `);
+        if(king.justCastled == true){
+
+        }
         return false;
 
     }
