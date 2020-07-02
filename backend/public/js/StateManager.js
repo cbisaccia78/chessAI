@@ -301,19 +301,31 @@ class Pawn extends Piece{
 
 
         if((ydiff == 1 && this.getColor() == 'white') || (ydiff == -1 && this.getColor() == 'black')){
-            if(xdiff == -1 || xdiff == 0 || xdiff == 1){
-                if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
-                    if((game[y2][x2].getColor() == "null" && xdiff == 0) || (game[y2][x2].getColor() != "null" && (game[y2][x2].getColor() != this.getColor()) && xdiff != 0)){
+          if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
+              if(xdiff == -1 || xdiff == 1){
+                    if(game[y2][x2].getColor() == "null"){
+                        if(game[y2][x2].passantable == true){
+                          this.takePassant = true;
+                          return true;
+                        }
+                        return false;
+                    }else if(game[y2][x2].getColor() != this.getColor()){
                         return true;
-                    }
-                    console.log(`true legal patern king coord ${game[0][4].id} ${game[2][4].id}`);
+                    }else{
                     return false;
+                    }
+              }else if(xdiff == 0){
+                if((game[y2][x2].getColor() == "null")){
+                    //add a variable to represent a pawn that just queened
+                    return true;
                 }
-                console.log('off the board');
                 return false;
+              }else{
+              console.log('wrong xdiff');
+              return false;
             }
-            console.log('wrong xdiff');
-            return false;
+          }
+          return false;
         }
         else if((ydiff == 2 && this.getColor() == 'white') || (ydiff == -2 && this.getColor() == 'black')){
             console.log('2 step');
@@ -852,6 +864,10 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             }
           }
 
+        }
+
+        if(this.name == "pawn" && this.takePassant == true){
+          //set up for removal of the opposing pawn and also set 
         }
         console.log('838');
 
