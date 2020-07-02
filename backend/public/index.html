@@ -223,7 +223,7 @@ function drop(event){
     rook = move[2];
   }
   console.log(`${_piece.id} moving to (${_piece.location[0]},${_piece.location[1]})`);
-  console.log(`${chessGame.game[0][4].id}`);
+  //console.log(`${chessGame.game[0][4].id}`);
   //_piece = chessGame.game[baseY][baseX];
   //after movePiece the coordinates of the chessGame reflect the move
   //currentImage.setAttribute('x', baseX.toString());
@@ -236,6 +236,7 @@ function drop(event){
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
   if(move.length == 4){
+    console.log(`rook id = ${rook.id}`);
     var rookImage = document.getElementById(rook.id);
     rookImage.setAttribute('x', ((rook.location[0])*100).toString());
     rookImage.setAttribute('y', ((rook.location[1])*100).toString());
