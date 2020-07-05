@@ -811,6 +811,8 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
           //console.log(`${this.game[y1][x1].name} ${this.game[y1][x1].justCastled}`);
         var tempRook;
 
+        var tempPawn;
+
         if(this.game[y1][x1].name == "king" && this.game[y1][x1].justCastled == true){
           console.log('king justCastled true');
           this.getPlayer(color).pieces[4].justCastled = true;
@@ -866,8 +868,10 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
         }
 
-        if(this.name == "pawn" && this.takePassant == true){
-          //set up for removal of the opposing pawn and also set 
+        if(move[0].name == "pawn" && move[0].takePassant == true){
+          //set up for removal of the opposing pawn and also set
+          tempPawn = this.game[y0][x1].deepCopy();
+          this.game[y0][x1] = new Empty("null", "empty", [x1, y0]);
         }
         console.log('838');
 
@@ -896,6 +900,10 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
             }
 
+            if(move[0].takePassant == true){
+              this.game[y0][x1] = tempPawn.deepCopy();
+            }
+
             return true;
           }
         });
@@ -912,8 +920,14 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
           console.log('881');
           console.log(`(${tempRook.location[1]}, ${tempRook.location[0]})`);
           this.game[tempRook.location[1]][tempRook.location[0]] = tempRook;
+          this.getPlayer(color).pieces[tempRook.pieceLoc] = tempRook.deepCopy();
           this.game[rookCords[1]][rookCords[0]] = new Empty("null", "empty", [rookCords[0], rookCords[1]]);
         }
+
+        if(move[0].takePassant == true){
+          this.game[y0][x1] = tempPawn.deepCopy();
+        }
+        
         return false;
 
     }
