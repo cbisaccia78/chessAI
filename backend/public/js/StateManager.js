@@ -237,6 +237,8 @@ class Pawn extends Piece{
         super(color,name,location);
         this.moved = moved;
         this.pieceLoc = this.location[0];
+        this.passantable = false;
+        this.takePassant = false;
         if(color == 'white'){
           this.url = "http://localhost:3000/images/Chess_plt60.png"
           if(this.location[0] == 0){
@@ -281,6 +283,8 @@ class Pawn extends Piece{
     deepCopy(){
       var copy = new Pawn(this.color,this.name,this.location,this.moved);
       copy.id = this.id;
+      copy.passantable = this.passantable;
+      copy.takePassant = this.takePassant;
       return copy;
     }
     moves(){
@@ -304,8 +308,11 @@ class Pawn extends Piece{
           if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
               if(xdiff == -1 || xdiff == 1){
                     if(game[y2][x2].getColor() == "null"){
-                      console.log("evaluating possible en passant")
+                      console.log("evaluating possible en passant");
+                        console.log(`piece at (${x2}, ${y1}) = ${game[y1][x2].name} ${game[y1][x2].passantable}`);
                         if(game[y1][x2].passantable == true){
+                          console.log('changing takepassant value');
+                          game[y1][x1].takePassant = true;
                           this.takePassant = true;
                           return true;
                         }
@@ -316,6 +323,9 @@ class Pawn extends Piece{
                     return false;
                     }
               }else if(xdiff == 0){
+                if(this.passantable == true){
+                  game[y1][x1].passantable = false;
+                }
                 if((game[y2][x2].getColor() == "null")){
                     //add a variable to represent a pawn that just queened
                     return true;
@@ -335,6 +345,7 @@ class Pawn extends Piece{
                 return false;
             }
             this.passantable = true;
+            game[y1][x1].passantable = true;
             if(xdiff == 0){
                 if(y2 < 8 && y2 > -1){
                     if(game[y2][x2].getColor() == this.getColor()){
@@ -754,6 +765,11 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
         this.color = Math.floor(Math.random() * 2);
         this.turn = 'null';
+
+        this.p1.color = "white";
+        this.p2.color = "black";
+        this.turn = "white";
+        /**
         if(this.color == 0){
             this.p1.setColor("white");
             this.p2.setColor("black");
@@ -764,20 +780,19 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             this.p2.setColor("white");
             this.turn = this.p2;
         }
+        **/
 
 
         this.game = this.initializeGame();    //   game[][]
     }
     getPlayer(color){
-        if(color === "white"){
+        console.log(`this.p1.color == ${this.p1.color}`)
+        if(this.p1.color == color){
             return this.p1;
-          }
-        else if(color === "black"){
+          }else{
             return this.p2;
           }
-        else{
-            return false;
-          }
+
       }
 
     returnOpposingPieces(color){
@@ -946,10 +961,11 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
         if(move[0].legalPattern([x2,y2], this.game)){//can the piece move in that pattern?
           //console.log(`knight after legalPattern ${this.game[3][3].id} `);
-            console.log(`7,7 after legal pattern ${this.game[7][7].id}`);
+            //console.log(`7,7 after legal pattern ${this.game[7][7].id}`);
+            console.log(`passantable: ${this.game[move[0].location[1]][move[0].location[0]].passantable}`)
             if(!this.selfCheck(move)){ //does the move not put you in check?
               //console.log(`knight after selfcheck ${this.game[3][3].id}`);
-              console.log(`7,7 after selfCheck ${this.game[7][7].id}`);
+              //console.log(`7,7 after selfCheck ${this.game[7][7].id}`);
                 return true;
               }
             else{//move puts you in check
@@ -993,13 +1009,15 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
               this.getPlayer(this.game[y1][x1].getColor()).pieces = front;
             }
 
-            if(move[0].name == "pawn" && move[0].takePassant == true){
+            if(this.game[y0][x0].name == "pawn" && this.game[y0][x0].takePassant == true){
+              console.log('takepassant in movepiece');
               moveholder[0] = true;
               moveholder[1] = this.game[y0][x1].id;
               var temp = this.getPlayer(this.game[y0][x1].getColor()).pieces;
               var front = temp.slice(0, this.game[y0][x1].pieceLoc);
               temp.slice(this.game[y0][x1].pieceLoc + 1, 16).forEach(element => front.push(element));
               this.getPlayer(this.game[y0][x1].getColor()).pieces = front;
+              this.game[y0][x0].takePassant = false;
             }
 
 
@@ -1080,6 +1098,11 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
             */
             moveholder.push(this.game[y1][x1]);
+            if(move[0].color == "white"){
+              this.turn = "black";
+            }else{
+              this.turn = "white";
+            }
             return moveholder;
           }
         else{
@@ -1099,20 +1122,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
       }
 
 
-    translateExecute(moveString){  //string will come in like "e2e4"
 
-        x1 = xTranslate(moveString[0]);
-        y1 = yTranslate(moveString[1]);
-        piece = this.game[y1][x1];
-        coord = piece.getCoords();
-
-
-        x2 = xTranslate(moveString[2]);
-        y2 = yTranslate(moveString[3]);
-
-
-        //this.movePiece([piece,x2,y2], false]);
-    }
 
     printGame(){
         for(var i = 0; i < 8; i++){

@@ -182,6 +182,8 @@ function dragging(event){
     }
     var xx = event.clientX;
     var yy = event.clientY;
+    xx = xx-50;
+    yy = yy-50;
     var im = document.getElementById(id);
     im.setAttribute('x', xx.toString());
     im.setAttribute('y', yy.toString());
@@ -212,8 +214,16 @@ function drop(event){
     clicked = false;
     return;
   }
+  if(chessGame.turn != _piece.color){
+    console.log('not ur turn');
+    clicked = false;
+    currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
+    currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
+    return;
+  }
   console.log(`moving to (${baseX},${baseY})`);
   console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
+
   var move = chessGame.movePiece([_piece, baseX, baseY]);
   _piece = move[2];
   var rook;
@@ -235,7 +245,7 @@ function drop(event){
 
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
-  if(move.length == 4){  
+  if(move.length == 4){
     console.log(`rook id = ${rook.id}`);
     var rookImage = document.getElementById(rook.id);
     rookImage.setAttribute('x', ((rook.location[0])*100).toString());
