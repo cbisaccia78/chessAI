@@ -256,6 +256,10 @@ function drop(event){
   //else, revert the img coordinates to go back to lastX, lastY
   console.log('drop!');
   clicked = false;
+  if(chessGame.checkMate() == true){
+    //stop input and display game over stuff
+  }
+  
   }
 
 

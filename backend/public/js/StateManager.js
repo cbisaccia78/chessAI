@@ -1222,6 +1222,8 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
       }
 
     checkMate(){
+        var k = this.getKing(this.turn)
+        
         return false;
       }
 }
