@@ -235,7 +235,7 @@ function drop(event){
 
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
-  if(move.length == 4){
+  if(move.length == 4){  
     console.log(`rook id = ${rook.id}`);
     var rookImage = document.getElementById(rook.id);
     rookImage.setAttribute('x', ((rook.location[0])*100).toString());
