@@ -221,6 +221,8 @@ function drop(event){
     currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
     return;
   }
+
+  
   console.log(`moving to (${baseX},${baseY})`);
   console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
 
@@ -259,7 +261,7 @@ function drop(event){
   if(chessGame.checkMate() == true){
     //stop input and display game over stuff
   }
-  
+
   }
 
 

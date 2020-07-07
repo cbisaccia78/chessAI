@@ -9,6 +9,7 @@ class Player  {
         this.color = "null"
         this.pieces = []; //[lrook, lknight, lbishop,queen, king, rbishop, rnight, rrook, 0-7pawns ]
         this.check = false;
+        this.inCheck = false;
     }
 
     getName(){
@@ -58,6 +59,8 @@ class Piece{
     getCoords(){
         return this.location;
       }
+
+
 
 
 }
@@ -116,9 +119,6 @@ class Knight extends Piece{
       copy.id = this.id;
       return copy;
     }
-    moves(){
-        return;
-      }
     legalPattern(xy,game){
         var x1 = this.location[0];
         var y1 = this.location[1];
@@ -807,6 +807,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
     }
 
 
+
     selfCheck(move){ //check if a move puts yourself in check
         var xy = move[0].getCoords();
         var color = move[0].getColor();
@@ -987,7 +988,23 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         console.log(`${this.p2.pieces[2].id} at (${this.p2.pieces[2].location[0]}, ${this.p2.pieces[2].location[1]})`);
         console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
         */
+
+
         if(this.isLegal(move)){
+            if(this.getPlayer(move[0].color).inCheck == true){
+              var outOfCheck = true;
+              var kc = this.getPlayer(move[0].color).pieces[4].location;
+              this.returnOpposingPieces(move[0].color).forEach(element => {
+                if(element.attackingKing(kc, this.game) == true){
+                  outOfCheck = false;
+                  break;
+                }
+              });
+              if(inCheck == false){
+                return false;
+              }
+              return [false, "Empty",move[0]];
+            }
             console.log(`0,0 ${this.game[0][0].id} 0,7 ${this.game[0][7].id} 7,0 ${this.game[7][0].id} 7,7 ${this.game[7][7].id}`);
             var x0 = move[0].getCoords()[0];
             var y0 = move[0].getCoords()[1];
@@ -1097,12 +1114,31 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             console.log(`${this.p2.pieces[2].id} at (${this.p2.pieces[2].location[0]}, ${this.p2.pieces[2].location[1]})`);
             console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
             */
+            if(this.game[move[2]][move[1]].name == "king"){
+              //set opposing players inCheck to true
+              if(this.p1.color == move[0].color){
+                this.p2.inCheck = true;
+              }else{
+                this.p1.inCheck = true;
+              }
+
+            }
+
+            if(getPlayer(move[0].color).inCheck == true){//if u successfully made it out of a check
+              if(this.p1.color == move[0].color){
+                this.p1.inCheck = false;
+              }else{
+                this.p2.inCheck = false;
+              }
+            }
+
             moveholder.push(this.game[y1][x1]);
             if(move[0].color == "white"){
               this.turn = "black";
             }else{
               this.turn = "white";
             }
+
             return moveholder;
           }
         else{
@@ -1222,9 +1258,49 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
       }
 
     checkMate(){
-        var k = this.getKing(this.turn)
-        
-        return false;
+        var k = this.getKing(this.turn);
+        var kingCoords = k.location;
+        var inCheck = false;
+        this.returnOpposingPieces(k.color).forEach(element => {
+          if(element.attackingKing(kingcoords, this.game) == true){
+            inCheck = true;
+            break;
+          }
+        });
+        if(inCheck == false){
+          return false;
+        }
+
+        var checkMate = true;
+        this.getPlayer(k.color).pieces.forEach(element => {
+          var i;
+          var j;
+          for(i = 0; i < 8; i++){
+            for(j = 0; j < 8; j++){
+              if(element.legalPattern([i,j], game) == true){ // for eery
+                if(this.selfCheck([element, i, j]) == false){
+                  checkMate = false;
+                  break;
+                }
+              }
+              var y0 = element.location[1];
+              var x0 = element.location[0];
+              if(this.game[y0][x0].name == "pawn" && this.game[y0][x0].takePassant == true){
+                console.log('undoing takepassant in checkmate');
+                this.game[y0][x0].takePassant = false;
+                this.game[y0][i].passantable = false;
+              }
+
+              if(this.game[y0][x0].name == "king" && this.game[y0][x0].justCastled == true){
+                this.game[y1][x1].justCastled = false;
+                this.getPlayer(color).pieces[4].justCastled = false;
+              }
+            }
+          }
+        });
+
+        return checkMate;
+
       }
 }
 
