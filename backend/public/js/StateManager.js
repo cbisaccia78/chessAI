@@ -642,6 +642,7 @@ class King extends Piece{
         super(color,name,location);
         this.moved = moved;
         this.justCastled = false;
+        this.inCheck = false;
 
         if(color === 'white'){
           this.url = "http://localhost:3000/images/Chess_klt60.png"
@@ -683,6 +684,9 @@ class King extends Piece{
         else if((xdiff == 2 || xdiff == -2) && ydiff == 0){
           //check for castling
           if(this.moved == true){
+            return false;
+          }
+          if(this.inCheck == true){
             return false;
           }
           var reflectX = 1;
@@ -1120,8 +1124,10 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             */
             if(this.game[move[2]][move[1]].name == "king"){
               //set opposing players inCheck to true
+              this.game[move[2]][move[1]].inCheck = true;
               if(this.p1.color == move[0].color){
                 this.p2.inCheck = true;
+
               }else{
                 this.p1.inCheck = true;
               }
@@ -1129,6 +1135,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             }
 
             if(this.getPlayer(move[0].color).inCheck == true){//if u successfully made it out of a check
+              this.game[move[2]][move[1]].incheck = false;
               if(this.p1.color == move[0].color){
                 this.p1.inCheck = false;
               }else{
