@@ -1268,6 +1268,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         var inCheck = false;
         var q;
         var arr = this.returnOpposingPieces(k.color);
+        var attackers = [];
         //console.log(`${arr.length}`);
         for(q = 0; q < arr.length; q++){
 
@@ -1276,9 +1277,9 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
           if(element.legalPattern(kingCoords, this.game) == true){
             console.log(`${element.name} checking the king`);
             inCheck = true;
-            break;
+            attackers.push(element);
           }
-      }
+        }
         if(inCheck == false){
           return false;
         }
