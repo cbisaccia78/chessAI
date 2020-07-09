@@ -500,10 +500,11 @@ class Queen extends Piece {
         var y2 = xy[1];
         var xdiff = x2-x1;
         var ydiff = (y2-y1);
-        //console.log(`x1 = ${x1} x2 = ${x2} y1 = ${y1} y2 = ${y2} xdiff = ${xdiff} ydiff = ${ydiff}`);
+        console.log(`x1 = ${x1} x2 = ${x2} y1 = ${y1} y2 = ${y2} xdiff = ${xdiff} ydiff = ${ydiff}`);
 
 
         if((ydiff == 0) != (xdiff == 0)){ //moves like rook
+            console.log('queen moves like a rook');
             if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
                 //for each square on path to move, is there an empty square or do you run into a piece? if not good to go
                 var reflectX = 1;
@@ -573,9 +574,9 @@ class Queen extends Piece {
           }
           else if(ydiff != 0){ //
               if(Math.abs((xdiff)/(ydiff)) == 1){//moves like bishop
-                //console.log('moves like a bishop')
+                console.log('moves like a bishop')
                   if(x2 > -1 && x2 < 8 && y2 > -1 && y2 < 8){
-                      //for each square on path to move, is there an empty square? if not false
+
                       //console.log('607');
                       var reflectX = 1;
                       var reflectY = 1
@@ -595,7 +596,7 @@ class Queen extends Piece {
                               //console.log('623');
                               if(x == x2){
                                   if(!(square.getColor() == this.getColor())){
-                                      //console.log('good to go!');
+                                      console.log('good to go!');
                                       return true;
                                   }
                                   //console.log(`friendly fire ${square.id}`);
@@ -1272,6 +1273,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         console.log(`in checkmate`)
         var k = this.getKing(this.turn);
         var kingCoords = k.location;
+        console.log(`${this.turn} ${k.color} ${k.name} ${kingCoords}`);
         var inCheck = false;
         var q;
         var arr = this.returnOpposingPieces(k.color);
@@ -1297,6 +1299,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
           var j;
           for(i = 0; i < 8; i++){
             for(j = 0; j < 8; j++){
+              console.log(`checking`);
               if(element.legalPattern([i,j], this.game) == true){ // for eery
                 if(this.selfCheck([element, i, j]) == false){
                   checkMate = false;
