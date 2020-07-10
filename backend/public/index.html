@@ -233,6 +233,7 @@ function drop(event){
   console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
 
 
+  var movingTo = chessGame.game[baseY][baseX].deepCopy();
 
   var move = chessGame.movePiece([_piece, baseX, baseY]);
 
@@ -255,7 +256,10 @@ function drop(event){
     document.getElementById(move[1]).setAttribute("style", "visibility:hidden");
   }
 
-  if(_piece.name == "pawn" && chessGame.game[baseY][baseX].name == "empty" && (_piece.color == "white" && baseY == 0) && chessGame.isLegal([_piece, baseX, baseY])){
+  console.log(`piece.name = ${_piece.name}   moving to ${movingTo.name}  piece.color = ${_piece.color}   baseY = ${baseY}`);
+
+  if(_piece.name == "pawn" && movingTo.name == "empty" && (_piece.color == "white" && baseY == 0)){
+    console.log('pawn promition:');
     //set up selection
     var pwn = document.createElement("img");
     pwn.src = "http://localhost:3000/images/chess_plt60.png";
@@ -287,17 +291,18 @@ function drop(event){
     q.width = "80";
     q.height = "80";
 
-    var bod = document.getElementById("body")
-    bod.appendChild(pwn);
-    bod.appendChild(rk);
-    bod.appendChild(n);
-    bod.appendChild(b);
-    bod.appendChild(q);
 
-    chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
+    document.body.appendChild(pwn);
+    document.body.appendChild(rk);
+    document.body.appendChild(n);
+    document.body.appendChild(b);
+    document.body.appendChild(q);
+
+    //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
 
   }
-  if(_piece.name == "pawn" && chessGame.game[baseY][baseX].name == "empty" && (_piece.color == "black" && baseY == 7) && chessGame.isLegal([_piece, baseX, baseY])){
+  if(_piece.name == "pawn" && movingTo.name == "empty" && (_piece.color == "black" && baseY == 7)){
+    console.log('pawn promition:');
     //set up selection
     var pwn = document.createElement("img");
     pwn.src = "http://localhost:3000/images/chess_pdt60.png";
@@ -320,8 +325,6 @@ function drop(event){
     var b = document.createElement("img");
     b.src = "http://localhost:3000/images/chess_bdt60.png";
     b.style = "position:relative; top: 360px; left: 440px";
-    b.setAttribute('x', "440");
-    b.setAttribute('y', "360");
     b.width = "80";
     b.height = "80";
 
@@ -331,13 +334,13 @@ function drop(event){
     q.width = "80";
     q.height = "80";
 
-    bod.appendChild(pwn);
-    bod.appendChild(rk);
-    bod.appendChild(n);
-    bod.appendChild(b);
-    bod.appendChild(q);
+    document.body.appendChild(pwn);
+    document.body.appendChild(rk);
+    document.body.appendChild(n);
+    document.body.appendChild(b);
+    document.body.appendChild(q);
 
-    chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
+    //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
 
   }
 
