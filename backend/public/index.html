@@ -153,6 +153,7 @@ var lastX = 0;
 var lastY = 0;
 var _piece;
 var cont = document.getElementById("contain");
+var checkM = false;
 
 
 
@@ -176,6 +177,9 @@ function dragOver(event){
 function dragging(event){
 
   //move the position of the piece to the current location of the pointer
+  if(checkM == true){
+    return;
+  }
   if (clicked){
     if(id == 'Empty'){
       return;
@@ -203,7 +207,9 @@ function dragging(event){
 
 function drop(event){
   //clearInterval(timer)
-
+  if(checkM == true){
+    return;
+  }
   var x = event.clientX;
   var y = event.clientY;
   console.log('wants a drop at'.concat(x,y));
@@ -258,9 +264,17 @@ function drop(event){
   //else, revert the img coordinates to go back to lastX, lastY
   console.log('drop!');
   clicked = false;
-  if(chessGame.checkMate() == true){
+  checkM = chessGame.checkMate();
+  if(checkM == true){
     //stop input and display game over stuff
     console.log(`checkmate`);
+    var checkMateScreen = document.createElementNS("http://www.w3.org/2000/svg","rect");
+    checkMateScreen.setAttribute('x', '200');
+    checkMateScreen.setAttribute('y', '200');
+    checkMateScreen.setAttribute('style', 'width: 400px; height: 400px; fill:blue;');
+    cont.appendChild(checkMateScreen);
+  }else{
+    console.log(`not Checkmate`);
   }
 
   }
@@ -271,6 +285,9 @@ function drop(event){
 
 function dragStart(event){
   //timer = setInterval(hello,50);
+  if(checkM == true){
+    return;
+  }
   clicked = true;
   var x = event.clientX;
   var y = event.clientY;
