@@ -5,7 +5,7 @@
 
 </head>
 
-<body>
+<body id = "body">
 
 
 
@@ -232,8 +232,12 @@ function drop(event){
   console.log(`moving to (${baseX},${baseY})`);
   console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
 
+
+
   var move = chessGame.movePiece([_piece, baseX, baseY]);
+
   _piece = move[2];
+
   var rook;
   if(move.length == 4){
     console.log('castling');
@@ -251,8 +255,95 @@ function drop(event){
     document.getElementById(move[1]).setAttribute("style", "visibility:hidden");
   }
 
+  if(_piece.name == "pawn" && chessGame.game[baseY][baseX].name == "empty" && (_piece.color == "white" && baseY == 0) && chessGame.isLegal([_piece, baseX, baseY])){
+    //set up selection
+    var pwn = document.createElement("img");
+    pwn.src = "http://localhost:3000/images/chess_plt60.png";
+    pwn.style = "position:relative; top: 360px; left: 200px";
+    pwn.width = "80";
+    pwn.height = "80";
+
+    var rk = document.createElement("img");
+    rk.src = "http://localhost:3000/images/chess_rlt60.png";
+    rk.style = "position:relative; top: 360px; left: 280px";
+    rk.width = "80";
+    rk.height = "80";
+
+    var n = document.createElement("img");
+    n.src = "http://localhost:3000/images/chess_nlt60.png";
+    n.style = "position:relative; top: 360px; left: 360px";
+    n.width = "80";
+    n.height = "80";
+
+    var b = document.createElement("img");
+    b.src = "http://localhost:3000/images/chess_blt60.png";
+    b.style = "position:relative; top: 360px; left: 440px";
+    b.width = "80";
+    b.height = "80";
+
+    var q = document.createElement("img");
+    q.href = "http://localhost:3000/images/chess_qlt60.png";
+    q.style = "position:relative; top: 360px; left: 520px";
+    q.width = "80";
+    q.height = "80";
+
+    var bod = document.getElementById("body")
+    bod.appendChild(pwn);
+    bod.appendChild(rk);
+    bod.appendChild(n);
+    bod.appendChild(b);
+    bod.appendChild(q);
+
+    chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
+
+  }
+  if(_piece.name == "pawn" && chessGame.game[baseY][baseX].name == "empty" && (_piece.color == "black" && baseY == 7) && chessGame.isLegal([_piece, baseX, baseY])){
+    //set up selection
+    var pwn = document.createElement("img");
+    pwn.src = "http://localhost:3000/images/chess_pdt60.png";
+    pwn.style = "position:relative; top: 360px; left: 200px";
+    pwn.width = "80";
+    pwn.height = "80";
+
+    var rk = document.createElement("img");
+    rk.src = "http://localhost:3000/images/chess_rdt60.png";
+    rk.style = "position:relative; top: 360px; left: 280px";
+    rk.width = "80";
+    rk.height = "80";
+
+    var n = document.createElement("img");
+    n.src = "http://localhost:3000/images/chess_ndt60.png";
+    n.style = "position:relative; top: 360px; left: 360px";
+    n.width = "80";
+    n.height = "80";
+
+    var b = document.createElement("img");
+    b.src = "http://localhost:3000/images/chess_bdt60.png";
+    b.style = "position:relative; top: 360px; left: 440px";
+    b.setAttribute('x', "440");
+    b.setAttribute('y', "360");
+    b.width = "80";
+    b.height = "80";
+
+    var q = document.createElement("img");
+    q.src = "http://localhost:3000/images/chess_qdt60.png";
+    q.style = "position:relative; top: 360px; left: 520px";
+    q.width = "80";
+    q.height = "80";
+
+    bod.appendChild(pwn);
+    bod.appendChild(rk);
+    bod.appendChild(n);
+    bod.appendChild(b);
+    bod.appendChild(q);
+
+    chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
+
+  }
+
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
+
   if(move.length == 4){
     console.log(`rook id = ${rook.id}`);
     var rookImage = document.getElementById(rook.id);

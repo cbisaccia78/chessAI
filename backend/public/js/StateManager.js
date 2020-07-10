@@ -785,6 +785,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         this.turn = "white";
 
         this.previousPassant = new Empty("null", "empty", [-1,-1]);
+        this.pawnPromotions = [false, false, false, false, false]; //0 = pawn 1 = rook 2 = knight 3 = bishop 4 = queen
         /**
         if(this.color == 0){
             this.p1.setColor("white");
@@ -1200,6 +1201,9 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             console.log(`${this.p2.pieces[2].id} at (${this.p2.pieces[2].location[0]}, ${this.p2.pieces[2].location[1]})`);
             console.log(`${this.p2.pieces[5].id} at (${this.p2.pieces[5].location[0]}, ${this.p2.pieces[5].location[1]})`);
             */
+
+
+
             if(this.game[move[2]][move[1]].name == "king"){
               //set opposing players inCheck to true
               this.game[move[2]][move[1]].inCheck = true;
@@ -1222,6 +1226,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
             }
 
             moveholder.push(this.game[y1][x1]);
+
             if(move[0].color == "white"){
               this.turn = "black";
             }else{
