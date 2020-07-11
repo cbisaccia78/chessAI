@@ -155,27 +155,84 @@ var _piece;
 var cont = document.getElementById("contain");
 var checkM = false;
 var promotedPiece;
+var promotedNum = 0;
+var promoted = false;
 
 
 function clickListener(event){
+  var x = event.clientX;
+  var y = event.clientY;
+  console.log('in clicklistener at '.concat(x,y));
 
-}
+  var baseX = (Math.floor(x / 100));
+  var baseY = (Math.floor(y / 100));
 
-function piecePromotion(){
-  cont.disabled = true;
-  //prompt user to click which piece he wants
-  var left = (_piece.location[0])*100;
-  var top = (_piece.location[1])*100;
-  var pS = document.createElement("svg");
-  pS.setAttribute("style", "width: 500px; height: 100px");
-  pS.setAttribute("")
+  var pX = _piece.location[0];
+  var pY = _piece.location[1];
+
+
+  if(baseY - pY != 0){
+    console.log('invalid promotion selection in the y direction');
+    return;
+  }
+
+  if(baseX - pX == 0){
+    //pawn
+    promotedNum = promotedNum + 1;
+    promotedPiece = new Pawn(`${_piece.color}`, `pawn`, `${_piece.location}`);
+    promotedPiece.id = `pp${promotedNum}`;
+  }else if(baseX - pX == 1){
+    //rook
+    promotedNum = promotedNum + 1;
+    promotedPiece = new Rook(`${_piece.color}`, `rook`, `${_piece.location}`);
+    promotedPiece.id = `pr${promotedNum}`;
+  }else if(baseX - pX == 2){
+    //knight
+    promotedNum = promotedNum + 1;
+    promotedPiece = new Knight(`${_piece.color}`, `knight`, `${_piece.location}`);
+    promotedPiece.id = `pn${promotedNum}`;
+  }else if(baseX - pX == 3){
+    //bishop
+    promotedNum = promotedNum + 1;
+    promotedPiece = new Bishop(`${_piece.color}`, `bishop`, `${_piece.location}`);
+    promotedPiece.id = `pb${promotedNum}`;
+  }else if(baseX- pX == 4){
+    //queen
+    promotedNum = promotedNum + 1;
+    promotedPiece = new Queen(`${_piece.color}`, `queen`, `${_piece.location}`);
+    promotedPiece.id = `pq${promotedNum}`;
+  }else{
+    console.log('invalid promotion selection in the X direction');
+    return;
+  }
+
+  chessGame.promotions.push(promotedPiece.deepCopy());
+  chessGame.game[promotedPiece.location[1]][promotedPiece.location[0]] = promotedPiece.deepCopy();
+
 
   //change _piece to the new selected piece
   //change chessGame.game[newPieceY][newPieceX] to the new Piece
   //add new piece to chessGame.promotions array
+  promoted = true;
+
+  document.body.removeChild(document.getElementById("pS"));
+
+}
+
+function piecePromotion(){
+
+  //prompt user to click which piece he wants
+
+  var pS = document.createElement("svg");
+  pS.setAttribute("style", `position: absolute; top:${(_piece.location[1])*100}px; left: ${(_piece.location[0])*100}px; width: 500px; height: 100px`);
+  pS.setAttribute("id", "pS");
+  pS.addEventListener("mousedown",clickListener);
+  document.body.appendChild(pS)
+
+
+
   //check for check, and set check to true for use in following checkmate algorithm
   //re-enable the container
-  cont.disabled = false;
 }
 
 function dragEnter(event){
@@ -212,6 +269,7 @@ function dragging(event){
     var im = document.getElementById(id);
     im.setAttribute('x', xx.toString());
     im.setAttribute('y', yy.toString());
+
     //console.log(`mouseclick: (${xx}, ${yy})   img: (${im.x}, ${im.y})`);
 
 
@@ -381,7 +439,12 @@ function drop(event){
 
   if(promotion == true){
     //disable container
+    cont.disabled = true;
     piecePromotion();
+    while(promoted == false){
+      continue; //spin
+    }
+    cont.disabled = false;
 
   }
 
