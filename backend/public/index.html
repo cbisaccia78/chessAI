@@ -154,8 +154,29 @@ var lastY = 0;
 var _piece;
 var cont = document.getElementById("contain");
 var checkM = false;
+var promotedPiece;
 
 
+function clickListener(event){
+
+}
+
+function piecePromotion(){
+  cont.disabled = true;
+  //prompt user to click which piece he wants
+  var left = (_piece.location[0])*100;
+  var top = (_piece.location[1])*100;
+  var pS = document.createElement("svg");
+  pS.setAttribute("style", "width: 500px; height: 100px");
+  pS.setAttribute("")
+
+  //change _piece to the new selected piece
+  //change chessGame.game[newPieceY][newPieceX] to the new Piece
+  //add new piece to chessGame.promotions array
+  //check for check, and set check to true for use in following checkmate algorithm
+  //re-enable the container
+  cont.disabled = false;
+}
 
 function dragEnter(event){
   //check if the move is legal
@@ -258,11 +279,14 @@ function drop(event){
 
   console.log(`piece.name = ${_piece.name}   moving to ${movingTo.name}  piece.color = ${_piece.color}   baseY = ${baseY}`);
 
+  var promotion = false;
+
+
   if(_piece.name == "pawn" && (_piece.color == "white" && baseY == 0)){
     console.log('pawn promition:');
     //set up selection
-    var left = (_piece.location[0])*100 + 8;
-    var top = (_piece.location[1])*100 + 8;
+    var left = (_piece.location[0])*100;
+    var top = (_piece.location[1])*100;
 
 
     var pwn = document.createElement("img");
@@ -273,25 +297,25 @@ function drop(event){
 
     var rk = document.createElement("img");
     rk.src = "http://localhost:3000/images/chess_rlt60.png";
-    rk.style = `position:absolute; top: ${top}px; left: ${left+80}px`;
+    rk.style = `position:absolute; top: ${top}px; left: ${left+100}px`;
     rk.width = "100";
     rk.height = "100";
 
     var n = document.createElement("img");
     n.src = "http://localhost:3000/images/chess_nlt60.png";
-    n.style = `position:absolute; top: ${top}px; left: ${left+160}px`;
+    n.style = `position:absolute; top: ${top}px; left: ${left+200}px`;
     n.width = "100";
     n.height = "100";
 
     var b = document.createElement("img");
     b.src = "http://localhost:3000/images/chess_blt60.png";
-    b.style = `position:absolute; top: ${top}px; left: ${left+240}px`;
+    b.style = `position:absolute; top: ${top}px; left: ${left+300}px`;
     b.width = "100";
     b.height = "100";
 
     var q = document.createElement("img");
     q.src = "http://localhost:3000/images/chess_qlt60.png";
-    q.style = `position:absolute; top: ${top}px; left: ${left+320}px`;//520
+    q.style = `position:absolute; top: ${top}px; left: ${left+400}px`;//520
     q.width = "100";
     q.height = "100";
 
@@ -302,14 +326,16 @@ function drop(event){
     document.body.appendChild(b);
     document.body.appendChild(q);
 
+    promotion = true;
+
     //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
 
   }
   if(_piece.name == "pawn" && (_piece.color == "black" && baseY == 7)){
     console.log('pawn promition:');
     //set up selection
-    var left = (_piece.location[0])*100+8;
-    var top = (_piece.location[1])*100+8;
+    var left = (_piece.location[0])*100;
+    var top = (_piece.location[1])*100;
 
     var pwn = document.createElement("img");
     pwn.src = "http://localhost:3000/images/chess_pdt60.png";
@@ -319,25 +345,25 @@ function drop(event){
 
     var rk = document.createElement("img");
     rk.src = "http://localhost:3000/images/chess_rdt60.png";
-    rk.style = `position:absolute; top: ${top}px; left: ${left+80}px`;
+    rk.style = `position:absolute; top: ${top}px; left: ${left+100}px`;
     rk.width = "100";
     rk.height = "100";
 
     var n = document.createElement("img");
     n.src = "http://localhost:3000/images/chess_ndt60.png";
-    n.style = `position:absolute; top: ${top}px; left: ${left+160}px`;
+    n.style = `position:absolute; top: ${top}px; left: ${left+200}px`;
     n.width = "100";
     n.height = "100";
 
     var b = document.createElement("img");
     b.src = "http://localhost:3000/images/chess_bdt60.png";
-    b.style = `position:absolute; top: ${top}px; left: ${left+240}px`;
+    b.style = `position:absolute; top: ${top}px; left: ${left+300}px`;
     b.width = "100";
     b.height = "100";
 
     var q = document.createElement("img");
     q.src = "http://localhost:3000/images/chess_qdt60.png";
-    q.style = `position:absolute; top: ${top}px; left: ${left+320}px`;//520
+    q.style = `position:absolute; top: ${top}px; left: ${left+400}px`;//520
     q.width = "100";
     q.height = "100";
 
@@ -347,7 +373,15 @@ function drop(event){
     document.body.appendChild(b);
     document.body.appendChild(q);
 
+    promotion = true;
+
     //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
+
+  }
+
+  if(promotion == true){
+    //disable container
+    piecePromotion();
 
   }
 
@@ -360,7 +394,7 @@ function drop(event){
     rookImage.setAttribute('x', ((rook.location[0])*100).toString());
     rookImage.setAttribute('y', ((rook.location[1])*100).toString());
   }
-  console.log(`${chessGame.game[0][4].id}`);
+
   //if the drop is legal: then good
   //else, revert the img coordinates to go back to lastX, lastY
   console.log('drop!');

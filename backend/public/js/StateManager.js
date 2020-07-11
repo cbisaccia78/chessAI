@@ -786,6 +786,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
 
         this.previousPassant = new Empty("null", "empty", [-1,-1]);
         this.pawnPromotions = [false, false, false, false, false]; //0 = pawn 1 = rook 2 = knight 3 = bishop 4 = queen
+        this.promotions = [];
         /**
         if(this.color == 0){
             this.p1.setColor("white");
