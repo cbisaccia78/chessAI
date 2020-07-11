@@ -210,12 +210,24 @@ function clickListener(event){
   chessGame.game[promotedPiece.location[1]][promotedPiece.location[0]] = promotedPiece.deepCopy();
 
 
-  //change _piece to the new selected piece
-  //change chessGame.game[newPieceY][newPieceX] to the new Piece
-  //add new piece to chessGame.promotions array
-  promoted = true;
 
   document.body.removeChild(document.getElementById("pS"));
+  if(promotedPiece.color == "white"){
+    document.body.removeChild(document.getElementById("wp"));
+    document.body.removeChild(document.getElementById("wr"));
+    document.body.removeChild(document.getElementById("wn"));
+    document.body.removeChild(document.getElementById("wb"));
+    document.body.removeChild(document.getElementById("wq"));
+  }else{
+    document.body.removeChild(document.getElementById("bp"));
+    document.body.removeChild(document.getElementById("br"));
+    document.body.removeChild(document.getElementById("bn"));
+    document.body.removeChild(document.getElementById("bb"));
+    document.body.removeChild(document.getElementById("bq"));
+  }
+
+  promoted = true;
+  return;
 
 }
 
@@ -348,30 +360,35 @@ function drop(event){
 
 
     var pwn = document.createElement("img");
+    pwn.id = "wp";
     pwn.src = "http://localhost:3000/images/chess_plt60.png";
     pwn.style = `position:absolute; top: ${top}px; left: ${left}px`;
     pwn.width = "100";
     pwn.height = "100";
 
     var rk = document.createElement("img");
+    rk.id = "wr";
     rk.src = "http://localhost:3000/images/chess_rlt60.png";
     rk.style = `position:absolute; top: ${top}px; left: ${left+100}px`;
     rk.width = "100";
     rk.height = "100";
 
     var n = document.createElement("img");
+    n.id = "wn";
     n.src = "http://localhost:3000/images/chess_nlt60.png";
     n.style = `position:absolute; top: ${top}px; left: ${left+200}px`;
     n.width = "100";
     n.height = "100";
 
     var b = document.createElement("img");
+    b.id = "wb";
     b.src = "http://localhost:3000/images/chess_blt60.png";
     b.style = `position:absolute; top: ${top}px; left: ${left+300}px`;
     b.width = "100";
     b.height = "100";
 
     var q = document.createElement("img");
+    q.id = "wq"
     q.src = "http://localhost:3000/images/chess_qlt60.png";
     q.style = `position:absolute; top: ${top}px; left: ${left+400}px`;//520
     q.width = "100";
@@ -396,30 +413,35 @@ function drop(event){
     var top = (_piece.location[1])*100;
 
     var pwn = document.createElement("img");
+    pwn.id = "bp";
     pwn.src = "http://localhost:3000/images/chess_pdt60.png";
     pwn.style = `position:absolute; top: ${top}px; left: ${left}px`;
     pwn.width = "100";
     pwn.height = "100";
 
     var rk = document.createElement("img");
+    rk.id = "br";
     rk.src = "http://localhost:3000/images/chess_rdt60.png";
     rk.style = `position:absolute; top: ${top}px; left: ${left+100}px`;
     rk.width = "100";
     rk.height = "100";
 
     var n = document.createElement("img");
+    n.id = "bn";
     n.src = "http://localhost:3000/images/chess_ndt60.png";
     n.style = `position:absolute; top: ${top}px; left: ${left+200}px`;
     n.width = "100";
     n.height = "100";
 
     var b = document.createElement("img");
+    b.id = "bb";
     b.src = "http://localhost:3000/images/chess_bdt60.png";
     b.style = `position:absolute; top: ${top}px; left: ${left+300}px`;
     b.width = "100";
     b.height = "100";
 
     var q = document.createElement("img");
+    q.id = "bq";
     q.src = "http://localhost:3000/images/chess_qdt60.png";
     q.style = `position:absolute; top: ${top}px; left: ${left+400}px`;//520
     q.width = "100";
@@ -440,11 +462,13 @@ function drop(event){
   if(promotion == true){
     //disable container
     cont.disabled = true;
-    piecePromotion();
+    piecePromotion
     while(promoted == false){
       continue; //spin
-    }
+    }//after this the piece is now the promoted piece
     cont.disabled = false;
+    //check to see if new piece is check
+    //also remove Pawn and set current image to the promoted piece;
 
   }
 
