@@ -10,7 +10,7 @@
 
 
 
-<svg id = "contain" width = "800" height = "800" style = "position: absolute">
+<svg id = "contain" width = "800" height = "800">
   <defs>
     <filter id = "f1" x = "0" y = "0">
       <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
@@ -345,14 +345,21 @@ function drop(event){
 
   var promotion = false;
 
+  var imt = document.createElement("img");
+  imt.id = "iq";
+  imt.src = "http://localhost:3000/images/chess_plt60.png";
+  imt.style = `position: absolute; top: 600px; left: 1000px; z-index: 2`;
+  imt.width = "100";
+  imt.height = "100";
+  document.body.appendChild(imt);
 
   if(_piece.name == "pawn" && (_piece.color == "white" && baseY == 0)){
     console.log('pawn promition:');
     //set up selection
     var left = (_piece.location[0])*100;
-    var top = (_piece.location[1])*100;
+    var to = (_piece.location[1])*100;
 
-    console.log(`left = ${left} top = ${top}`);
+    //console.log(`left = ${left} top = ${to}`);
 
 
     //console.log('i');
@@ -361,7 +368,7 @@ function drop(event){
     pwn.id = "wp";
     //console.log('i');
     pwn.src = "http://localhost:3000/images/chess_plt60.png";
-    pwn.style = `position: absolute; top: ${top}px; left: ${left}px; z-index: 2`;
+    pwn.style = `position: absolute; top: ${to}px; left: ${left}px; z-index: 2`;
     pwn.width = "100";
     pwn.height = "100";
     //console.log('i');
@@ -370,39 +377,37 @@ function drop(event){
     rk.id = "wr";
     rk.src = "http://localhost:3000/images/chess_rlt60.png";
     var rookL = left+100;
-    rk.style = `position: absolute; top: ${top}px; left: ${rookL}px; z-index: 2`;
-
+    rk.style = `position: absolute; top: ${to}px; left: ${rookL}px; z-index: 2`;
     rk.width = "100";
     rk.height = "100";
-    console.log('i');
 
     var n = document.createElement("img");
     n.id = "wn";
     n.src = "http://localhost:3000/images/chess_nlt60.png";
     var nL = left+200;
-    n.style = `position: absolute; top: ${top}px; left: ${nL}px; z-index: 2`;
+    n.style = `position: absolute; top: ${to}px; left: ${nL}px; z-index: 2`;
     n.width = "100";
     n.height = "100";
-    console.log('i');
+    //console.log('i');
 
     var b = document.createElement("img");
     b.id = "wb";
     b.src = "http://localhost:3000/images/chess_blt60.png";
     var bL = left+300;
-    b.style = `position: absolute; top: ${top}px; left: ${bL}px; z-index: 2`;
+    b.style = `position: absolute; top: ${to}px; left: ${bL}px; z-index: 2`;
     b.width = "100";
     b.height = "100";
 
-    console.log('i');
+
 
     var q = document.createElement("img");
-    q.id = "wq"
+    q.id = "wq";
     q.src = "http://localhost:3000/images/chess_qlt60.png";
     var qL = left+400;
-    q.style = `position: absolute; top: ${top}px; left: ${qL}px; z-index: 2`;//520
+    q.style = `position: absolute; top: ${to}px; left: ${qL}px; z-index: 2`;//520
     q.width = "100";
     q.height = "100";
-    console.log('i');
+
 
 
     document.body.appendChild(pwn);
@@ -410,7 +415,7 @@ function drop(event){
     document.body.appendChild(n);
     document.body.appendChild(b);
     document.body.appendChild(q);
-    document.addEventListener("mousedown",clickListener);
+    //document.addEventListener("mousedown",clickListener);
 
     promotion = true;
 
