@@ -10,7 +10,7 @@
 
 
 
-<svg id = "contain" width = "800" height = "800">
+<svg id = "contain" width = "800" height = "800" style = "position: absolute">
   <defs>
     <filter id = "f1" x = "0" y = "0">
       <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
@@ -153,6 +153,7 @@ var lastX = 0;
 var lastY = 0;
 var _piece;
 var cont = document.getElementById("contain");
+var promContain;
 var checkM = false;
 var promotedPiece;
 var promotedNum = 0;
@@ -160,6 +161,7 @@ var promoted = false;
 
 
 function clickListener(event){
+  console.log('i');
   var x = event.clientX;
   var y = event.clientY;
   console.log('in clicklistener at '.concat(x,y));
@@ -175,6 +177,7 @@ function clickListener(event){
     console.log('invalid promotion selection in the y direction');
     return;
   }
+  console.log('i');
 
   if(baseX - pX == 0){
     //pawn
@@ -207,7 +210,14 @@ function clickListener(event){
   }
 
   chessGame.promotions.push(promotedPiece.deepCopy());
+  if(promotedPiece.color == chessGame.p1.color){
+    chessGame.p1.pieces.push(promotedPiece.deepCopy())
+  }else{
+    chessGame.p2.pieces.push(promotedPiece.deepCopy())
+  }
+
   chessGame.game[promotedPiece.location[1]][promotedPiece.location[0]] = promotedPiece.deepCopy();
+  _piece = promotedPiece.deepCopy();
 
 
 
@@ -229,22 +239,6 @@ function clickListener(event){
   promoted = true;
   return;
 
-}
-
-function piecePromotion(){
-
-  //prompt user to click which piece he wants
-
-  var pS = document.createElement("svg");
-  pS.setAttribute("style", `position: absolute; top:${(_piece.location[1])*100}px; left: ${(_piece.location[0])*100}px; width: 500px; height: 100px`);
-  pS.setAttribute("id", "pS");
-  pS.addEventListener("mousedown",clickListener);
-  document.body.appendChild(pS)
-
-
-
-  //check for check, and set check to true for use in following checkmate algorithm
-  //re-enable the container
 }
 
 function dragEnter(event){
@@ -358,41 +352,57 @@ function drop(event){
     var left = (_piece.location[0])*100;
     var top = (_piece.location[1])*100;
 
+    console.log(`left = ${left} top = ${top}`);
 
+
+    //console.log('i');
     var pwn = document.createElement("img");
+    //console.log('i');
     pwn.id = "wp";
+    //console.log('i');
     pwn.src = "http://localhost:3000/images/chess_plt60.png";
-    pwn.style = `position:absolute; top: ${top}px; left: ${left}px`;
+    pwn.style = `position: absolute; top: ${top}px; left: ${left}px; z-index: 2`;
     pwn.width = "100";
     pwn.height = "100";
+    //console.log('i');
 
     var rk = document.createElement("img");
     rk.id = "wr";
     rk.src = "http://localhost:3000/images/chess_rlt60.png";
-    rk.style = `position:absolute; top: ${top}px; left: ${left+100}px`;
+    var rookL = left+100;
+    rk.style = `position: absolute; top: ${top}px; left: ${rookL}px; z-index: 2`;
+
     rk.width = "100";
     rk.height = "100";
+    console.log('i');
 
     var n = document.createElement("img");
     n.id = "wn";
     n.src = "http://localhost:3000/images/chess_nlt60.png";
-    n.style = `position:absolute; top: ${top}px; left: ${left+200}px`;
+    var nL = left+200;
+    n.style = `position: absolute; top: ${top}px; left: ${nL}px; z-index: 2`;
     n.width = "100";
     n.height = "100";
+    console.log('i');
 
     var b = document.createElement("img");
     b.id = "wb";
     b.src = "http://localhost:3000/images/chess_blt60.png";
-    b.style = `position:absolute; top: ${top}px; left: ${left+300}px`;
+    var bL = left+300;
+    b.style = `position: absolute; top: ${top}px; left: ${bL}px; z-index: 2`;
     b.width = "100";
     b.height = "100";
+
+    console.log('i');
 
     var q = document.createElement("img");
     q.id = "wq"
     q.src = "http://localhost:3000/images/chess_qlt60.png";
-    q.style = `position:absolute; top: ${top}px; left: ${left+400}px`;//520
+    var qL = left+400;
+    q.style = `position: absolute; top: ${top}px; left: ${qL}px; z-index: 2`;//520
     q.width = "100";
     q.height = "100";
+    console.log('i');
 
 
     document.body.appendChild(pwn);
@@ -400,8 +410,10 @@ function drop(event){
     document.body.appendChild(n);
     document.body.appendChild(b);
     document.body.appendChild(q);
+    document.addEventListener("mousedown",clickListener);
 
     promotion = true;
+
 
     //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
 
@@ -412,38 +424,39 @@ function drop(event){
     var left = (_piece.location[0])*100;
     var top = (_piece.location[1])*100;
 
+
     var pwn = document.createElement("img");
     pwn.id = "bp";
     pwn.src = "http://localhost:3000/images/chess_pdt60.png";
-    pwn.style = `position:absolute; top: ${top}px; left: ${left}px`;
+    pwn.style = `position: absolute; top: ${top}px; left: ${left}px; z-index: 2`;
     pwn.width = "100";
     pwn.height = "100";
 
     var rk = document.createElement("img");
     rk.id = "br";
     rk.src = "http://localhost:3000/images/chess_rdt60.png";
-    rk.style = `position:absolute; top: ${top}px; left: ${left+100}px`;
+    rk.style = `position: absolute; top: ${top}px; left: ${left+100}; z-index: 2px`;
     rk.width = "100";
     rk.height = "100";
 
     var n = document.createElement("img");
     n.id = "bn";
     n.src = "http://localhost:3000/images/chess_ndt60.png";
-    n.style = `position:absolute; top: ${top}px; left: ${left+200}px`;
+    n.style = `position: absolute; top: ${top}px; left: ${left+200}px; z-index: 2`;
     n.width = "100";
     n.height = "100";
 
     var b = document.createElement("img");
     b.id = "bb";
     b.src = "http://localhost:3000/images/chess_bdt60.png";
-    b.style = `position:absolute; top: ${top}px; left: ${left+300}px`;
+    b.style = `position: absolute; top: ${top}px; left: ${left+300}px; z-index: 2`;
     b.width = "100";
     b.height = "100";
 
     var q = document.createElement("img");
     q.id = "bq";
     q.src = "http://localhost:3000/images/chess_qdt60.png";
-    q.style = `position:absolute; top: ${top}px; left: ${left+400}px`;//520
+    q.style = `position: absolute; top: ${top}px; left: ${left+400}px; z-index: 2`;//520
     q.width = "100";
     q.height = "100";
 
@@ -452,28 +465,37 @@ function drop(event){
     document.body.appendChild(n);
     document.body.appendChild(b);
     document.body.appendChild(q);
+    document.addEventListener("mousedown",clickListener);
 
     promotion = true;
+
 
     //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
 
   }
+  currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
+  currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
 
   if(promotion == true){
     //disable container
     cont.disabled = true;
-    piecePromotion
+    //piecePromotion();
     while(promoted == false){
+      console.log('spinning');
       continue; //spin
     }//after this the piece is now the promoted piece
+    document.removeEventListener("mousedown", clickListener);
     cont.disabled = false;
+    //cont.visibility = "visible";
     //check to see if new piece is check
     //also remove Pawn and set current image to the promoted piece;
+    currentImage.setAttribute('href', _piece.url);
+    currentImage.setAttribute('id', _piece.id);
 
   }
 
-  currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
-  currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
+
+
 
   if(move.length == 4){
     console.log(`rook id = ${rook.id}`);
