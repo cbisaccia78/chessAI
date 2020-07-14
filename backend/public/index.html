@@ -140,7 +140,7 @@
 
 
 <script type = "module">
-import {Game} from "http://localhost:3000/js/StateManager.js"; //statemanager.js import
+import {Game, Pawn, Rook, Knight, Bishop, Queen} from "http://localhost:3000/js/StateManager.js"; //statemanager.js import
 var chessGame = new Game("5","cole","computer");
 chessGame.printGame();
 
@@ -160,11 +160,25 @@ var promotedNum = 0;
 var promoted = false;
 
 
+
+function sleep(milliseconds) {
+  const date = Date.now();
+  let currentDate = null;
+  do {
+    currentDate = Date.now();
+  } while (currentDate - date < milliseconds);
+}
+
+
+
 function clickListener(event){
   console.log('i');
+
+
+
   var x = event.clientX;
   var y = event.clientY;
-  console.log('in clicklistener at '.concat(x,y));
+
 
   var baseX = (Math.floor(x / 100));
   var baseY = (Math.floor(y / 100));
@@ -172,6 +186,7 @@ function clickListener(event){
   var pX = _piece.location[0];
   var pY = _piece.location[1];
 
+  console.log(`in clicklistener at (${baseX}, ${baseY}) and (${pX}, ${pY})`);
 
   if(baseY - pY != 0){
     console.log('invalid promotion selection in the y direction');
@@ -182,27 +197,27 @@ function clickListener(event){
   if(baseX - pX == 0){
     //pawn
     promotedNum = promotedNum + 1;
-    promotedPiece = new Pawn(`${_piece.color}`, `pawn`, `${_piece.location}`);
+    promotedPiece = new Pawn(`${_piece.color}`, `pawn`, _piece.location);
     promotedPiece.id = `pp${promotedNum}`;
   }else if(baseX - pX == 1){
     //rook
     promotedNum = promotedNum + 1;
-    promotedPiece = new Rook(`${_piece.color}`, `rook`, `${_piece.location}`);
+    promotedPiece = new Rook(`${_piece.color}`, `rook`, _piece.location);
     promotedPiece.id = `pr${promotedNum}`;
   }else if(baseX - pX == 2){
     //knight
     promotedNum = promotedNum + 1;
-    promotedPiece = new Knight(`${_piece.color}`, `knight`, `${_piece.location}`);
+    promotedPiece = new Knight(`${_piece.color}`, `knight`, _piece.location);
     promotedPiece.id = `pn${promotedNum}`;
   }else if(baseX - pX == 3){
     //bishop
     promotedNum = promotedNum + 1;
-    promotedPiece = new Bishop(`${_piece.color}`, `bishop`, `${_piece.location}`);
+    promotedPiece = new Bishop(`${_piece.color}`, `bishop`, _piece.location);
     promotedPiece.id = `pb${promotedNum}`;
   }else if(baseX- pX == 4){
     //queen
     promotedNum = promotedNum + 1;
-    promotedPiece = new Queen(`${_piece.color}`, `queen`, `${_piece.location}`);
+    promotedPiece = new Queen(`${_piece.color}`, `queen`, piece.location);
     promotedPiece.id = `pq${promotedNum}`;
   }else{
     console.log('invalid promotion selection in the X direction');
@@ -221,7 +236,7 @@ function clickListener(event){
 
 
 
-  document.body.removeChild(document.getElementById("pS"));
+  
   if(promotedPiece.color == "white"){
     document.body.removeChild(document.getElementById("wp"));
     document.body.removeChild(document.getElementById("wr"));
@@ -237,6 +252,18 @@ function clickListener(event){
   }
 
   promoted = true;
+  document.removeEventListener("mousedown", clickListener);
+  cont.disabled = false;
+  document.getElementById("contain").addEventListener("mousedown", dragStart);
+  document.getElementById("contain").addEventListener("mouseup", drop);
+  document.getElementById("contain").addEventListener("mouseover", dragEnter);
+  document.getElementById("contain").addEventListener("mouseout", dragLeave);
+  document.getElementById("contain").addEventListener("mousemove", dragging);
+  //cont.visibility = "visible";
+  //check to see if new piece is check
+  //also remove Pawn and set current image to the promoted piece;
+  currentImage.setAttribute('href', _piece.url);
+  currentImage.setAttribute('id', _piece.id);
   return;
 
 }
@@ -345,13 +372,6 @@ function drop(event){
 
   var promotion = false;
 
-  var imt = document.createElement("img");
-  imt.id = "iq";
-  imt.src = "http://localhost:3000/images/chess_plt60.png";
-  imt.style = `position: absolute; top: 600px; left: 1000px; z-index: 2`;
-  imt.width = "100";
-  imt.height = "100";
-  document.body.appendChild(imt);
 
   if(_piece.name == "pawn" && (_piece.color == "white" && baseY == 0)){
     console.log('pawn promition:');
@@ -415,9 +435,20 @@ function drop(event){
     document.body.appendChild(n);
     document.body.appendChild(b);
     document.body.appendChild(q);
-    //document.addEventListener("mousedown",clickListener);
+    currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
+    currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
+    document.getElementById("contain").removeEventListener("mousedown", dragStart);
+    document.getElementById("contain").removeEventListener("mouseup", drop);
+    document.getElementById("contain").removeEventListener("mouseover", dragEnter);
+    document.getElementById("contain").removeEventListener("mouseout", dragLeave);
+    document.getElementById("contain").removeEventListener("mousemove", dragging);
+    document.addEventListener("mousedown",clickListener);
 
     promotion = true;
+    cont.disabled = true;
+    clicked = false;
+
+    return;
 
 
     //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
@@ -427,41 +458,41 @@ function drop(event){
     console.log('pawn promition:');
     //set up selection
     var left = (_piece.location[0])*100;
-    var top = (_piece.location[1])*100;
+    var to = (_piece.location[1])*100;
 
 
     var pwn = document.createElement("img");
     pwn.id = "bp";
     pwn.src = "http://localhost:3000/images/chess_pdt60.png";
-    pwn.style = `position: absolute; top: ${top}px; left: ${left}px; z-index: 2`;
+    pwn.style = `position: absolute; top: ${to}px; left: ${left}px; z-index: 2`;
     pwn.width = "100";
     pwn.height = "100";
 
     var rk = document.createElement("img");
     rk.id = "br";
     rk.src = "http://localhost:3000/images/chess_rdt60.png";
-    rk.style = `position: absolute; top: ${top}px; left: ${left+100}; z-index: 2px`;
+    rk.style = `position: absolute; top: ${to}px; left: ${left+100}; z-index: 2px`;
     rk.width = "100";
     rk.height = "100";
 
     var n = document.createElement("img");
     n.id = "bn";
     n.src = "http://localhost:3000/images/chess_ndt60.png";
-    n.style = `position: absolute; top: ${top}px; left: ${left+200}px; z-index: 2`;
+    n.style = `position: absolute; top: ${to}px; left: ${left+200}px; z-index: 2`;
     n.width = "100";
     n.height = "100";
 
     var b = document.createElement("img");
     b.id = "bb";
     b.src = "http://localhost:3000/images/chess_bdt60.png";
-    b.style = `position: absolute; top: ${top}px; left: ${left+300}px; z-index: 2`;
+    b.style = `position: absolute; top: ${to}px; left: ${left+300}px; z-index: 2`;
     b.width = "100";
     b.height = "100";
 
     var q = document.createElement("img");
     q.id = "bq";
     q.src = "http://localhost:3000/images/chess_qdt60.png";
-    q.style = `position: absolute; top: ${top}px; left: ${left+400}px; z-index: 2`;//520
+    q.style = `position: absolute; top: ${to}px; left: ${left+400}px; z-index: 2`;//520
     q.width = "100";
     q.height = "100";
 
@@ -470,35 +501,28 @@ function drop(event){
     document.body.appendChild(n);
     document.body.appendChild(b);
     document.body.appendChild(q);
+    currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
+    currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
+    document.getElementById("contain").removeEventListener("mousedown", dragStart);
+    document.getElementById("contain").removeEventListener("mouseup", drop);
+    document.getElementById("contain").removeEventListener("mouseover", dragEnter);
+    document.getElementById("contain").removeEventListener("mouseout", dragLeave);
+    document.getElementById("contain").removeEventListener("mousemove", dragging);
     document.addEventListener("mousedown",clickListener);
 
+
+
+
+
     promotion = true;
-
-
+    cont.disabled = true;
+    clicked = false;
+    return;
     //chessGame.pawnPromotions[_p] = true; //unsolved logic bug: this does not test whether or not pawn promotion puts itself in selfcheck.
 
   }
   currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
   currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
-
-  if(promotion == true){
-    //disable container
-    cont.disabled = true;
-    //piecePromotion();
-    while(promoted == false){
-      console.log('spinning');
-      continue; //spin
-    }//after this the piece is now the promoted piece
-    document.removeEventListener("mousedown", clickListener);
-    cont.disabled = false;
-    //cont.visibility = "visible";
-    //check to see if new piece is check
-    //also remove Pawn and set current image to the promoted piece;
-    currentImage.setAttribute('href', _piece.url);
-    currentImage.setAttribute('id', _piece.id);
-
-  }
-
 
 
 

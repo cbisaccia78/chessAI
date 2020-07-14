@@ -93,7 +93,7 @@ class Empty extends Piece {
     }
 }
 
-class Knight extends Piece{
+export class Knight extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -141,7 +141,7 @@ class Knight extends Piece{
     }
 }
 
-class Bishop extends Piece{
+export class Bishop extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -235,7 +235,7 @@ class Bishop extends Piece{
 
 }
 
-class Pawn extends Piece{
+export class Pawn extends Piece{
     constructor(color,name,location, moved){
         super(color,name,location);
         this.moved = moved;
@@ -371,7 +371,7 @@ class Pawn extends Piece{
       }
 }
 
-class Rook extends Piece{
+export class Rook extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -477,7 +477,7 @@ class Rook extends Piece{
 
 
 
-class Queen extends Piece {
+export class Queen extends Piece {
     constructor(color,name,location){
         super(color,name,location);
 
