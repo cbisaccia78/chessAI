@@ -1,4 +1,4 @@
-//http://localhost:3000///from random import randint
+//http://localhost:///from random import randint
 //import copy
 
 
@@ -98,7 +98,7 @@ export class Knight extends Piece{
         super(color,name,location);
 
         if(color === 'white'){
-          this.url = "http://localhost:3000/images/Chess_nlt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_nlt60.png"
           //console.log(`x value `)
           if(this.location[0] == 1){
             this.id = "b1kn";
@@ -106,7 +106,7 @@ export class Knight extends Piece{
             this.id = "g1kn";
           }
         }else{
-          this.url = "http://localhost:3000/images/Chess_ndt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_ndt60.png"
           if(this.location[0] == 1){
             this.id = "b8kn";
           }else{
@@ -146,14 +146,14 @@ export class Bishop extends Piece{
         super(color,name,location);
 
         if(color ==='white'){
-          this.url = "http://localhost:3000/images/Chess_blt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_blt60.png"
           if(this.location[0] == 2){
             this.id = "c1b";
           }else{
             this.id = "f1b";
           }
         }else{
-          this.url = "http://localhost:3000/images/Chess_bdt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_bdt60.png"
           if(this.location[0] == 2){
             this.id = "c8b";
           }else{
@@ -243,7 +243,7 @@ export class Pawn extends Piece{
         this.passantable = false;
         this.takePassant = false;
         if(color == 'white'){
-          this.url = "http://localhost:3000/images/Chess_plt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_plt60.png"
           if(this.location[0] == 0){
             this.id = "a2p";
           }else if(this.location[0] == 1){
@@ -262,7 +262,7 @@ export class Pawn extends Piece{
             this.id = "h2p";
           }
         }else{
-          this.url = "http://localhost:3000/images/Chess_pdt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_pdt60.png"
           if(this.location[0] == 0){
             this.id = "a7p";
           }else if(this.location[0] == 1){
@@ -376,14 +376,14 @@ export class Rook extends Piece{
         super(color,name,location);
 
         if(color === 'white'){
-          this.url = "http://localhost:3000/images/Chess_rlt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_rlt60.png"
           if(this.location[0] == 0){
             this.id = "a1r";
           }else{
             this.id = "h1r";
           }
         }else{
-          this.url = "http://localhost:3000/images/Chess_rdt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_rdt60.png"
           if(this.location[0] == 0){
             this.id = "a8r";
           }else{
@@ -482,10 +482,10 @@ export class Queen extends Piece {
         super(color,name,location);
 
         if(color === 'white'){
-          this.url = "http://localhost:3000/images/Chess_qlt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_qlt60.png"
           this.id = "d1q"
         }else{
-          this.url = "http://localhost:3000/images/Chess_qdt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_qdt60.png"
           this.id = "d8q"
         }
       }
@@ -653,10 +653,10 @@ class King extends Piece{
         this.inCheck = false;
 
         if(color === 'white'){
-          this.url = "http://localhost:3000/images/Chess_klt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_klt60.png"
           this.id = "e1k"
         }else{
-          this.url = "http://localhost:3000/images/Chess_kdt60.png"
+          this.url = "http://174.129.83.34:80/images/Chess_kdt60.png"
           this.id = "e8k"
         }
       }
@@ -969,6 +969,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
         }
         ////console.log(`knight in selfCheck ${this.game[3][3].id} `);
         var opposites = this.returnOpposingPieces(color);
+
         //console.log(`opposite pieces length = ${opposites.length}`);
         //console.log(`knight in selfCheck ${this.game[3][3].id} `);
 
@@ -1359,7 +1360,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
     checkMate(){
         console.log(`in checkmate`)
         var k = this.getKing(this.turn);
-        var kingCoords = k.location;
+        var kingCoords = k.location
         console.log(`${this.turn} ${k.color} ${k.name} ${kingCoords}`);
         var inCheck = false;
         var q;
@@ -1381,7 +1382,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
           return false;
         }
 
-        var checkMate = true;
+
         var ar = this.getPlayer(k.color).pieces;
         var m;
         for(m = 0; m < ar.length; m++){
@@ -1397,8 +1398,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
                 console.log(`${element.name} (${element.location[0]},${element.location[1]}) => (${i},${j})`);
                 if(this.selfCheck([element, i, j]) == false){
                   console.log(`${element.name} can move to (${i}, ${j})`);
-                  checkMate = false;
-                  break;
+                  return false;
                 }
               }
               var y0 = element.location[1];
@@ -1418,7 +1418,7 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
           }
         }
 
-        return checkMate;
+        return true;
 
       }
 }
