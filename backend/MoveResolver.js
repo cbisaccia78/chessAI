@@ -1,5 +1,5 @@
 
-function w1(xjs, yjs, n){
+function ws(xjs, yjs, n){
   var i;
   var crossSum =0;
   var xSum = 0;
@@ -14,16 +14,20 @@ function w1(xjs, yjs, n){
   return [(n*(crossSum) - xSum*ySum)/(n*xSquareSum - Math.pow(xSum, 2)), ySum, xSum];
 }
 
-function w0(xjs, yjs, w1, n){
-    var w1Holder = w1(xjs, yjs, n);
-    var w1 = w1[0];
-    var ySum = w1[1];
-    var xSum = w1[2];
-    return (ySum - w1*xSum)/n;
+function w0(xjs, yjs, ws, n){
+    var wsHolder = ws(xjs, yjs, n);
+    var ws = ws[0];
+    var ySum = ws[1];
+    var xSum = ws[2];
+    return (ySum - ws*xSum)/n;
 }
 
 function wn(){
   return;
+}
+
+function h(sum){
+  return 1/(1+Math.exp(-1*(sum)));
 }
 
 function batchGraDesc(data){
@@ -33,39 +37,56 @@ function batchGraDesc(data){
     */
     var x1s = data[0];
     var x2s = data[1];
-    var y3s = data[2];
-    var y4s = data[3];
-    var w3 = [.5,.5];
-    var w4 = [.5,.5];
+    var ys = data[2];
+    var ws = [.5,.5];
     var loss;
     var iteration = 0;
     var a = 1000/(1000+iteration);
-    var proportion1 = 0;
-    var proportion2 = 0;
+    var proportion = 0;
+    var iterationArr = [];
+    for(var k = 20; k < 222250000; k*=5){
+      while(iteration < k){ // for each training example [x1, x2, y]
 
-    while(iteration < 1000){ // for each training example [x1i, x2i, y3i, y4i]
-      var i;
-      if(y3s[iteration%3] == + ((w3[0]*x1s[iteration%3]+w3[1]*x2s[iteration%3]) >= 0)){
-        proportion1 += 1;
-      }
-      if(y4s[iteration%3] == + ((w4[0]*x1s[iteration%3]+w4[1]*x2s[iteration%3]) >= 0)){
-        proportion2 += 1;
-      }
-      for(i = 0; i < 2; i++){
-        w3[i] =  w3[i] - a*(y3s[iteration%3]- +((w3[0]*x1s[iteration%3]+w3[1]*x2s[iteration%3]) >= 0));
-        w4[i] = w4[i] - a*(y4s[iteration%3]- +((w4[0]*x1s[iteration%3]+w4[1]*x2s[iteration%3]) >= 0));
-      }
-    iteration += 1;
-    a = 1000/(1000+iteration);
-    console.log(`w3[0] == ${w3[0]} w3[1] == ${w3[1]} w4[0] == ${w4[0]} w4[1] == ${w4[0]}`);
-    }
-    proportion1/= iteration;
-    proportion2/= iteration;
-    ;
+        //console.log(`iteration%4 = ${iteration%4}`);
+        //console.log(`carry = ${ys[iteration%4]} h(wc*x) = ${(ws[0]*x1s[iteration%4]+ws[1]*x2s[iteration%4])}`);
+        var w1 = ws[0];
+        var w2 = ws[1];
+        var x1 = x1s[iteration%4];
+        var x2 = x2s[iteration%4];
+        var sum = (w1*x1+w2*x2);
+        //console.log(`ys[iteration%4] = ${ys[iteration%4]} h(sum) = ${h(sum)}`);
+        if(ys[iteration%4] - h(sum) < 0.01){
+          proportion += 1;
+        }
+        //console.log(`sum = ${ys[iteration%4]} h(ws*x) = ${(w2[0]*x1s[iteration%4]+w2[1]*x2s[iteration%4])}`);
 
-    return [w3, w4, proportion1, proportion2];
+
+        ws[0] =  ws[0] - a*(ys[iteration%4]- h(sum))*(h(sum))*(1-h(sum))*x1;
+        ws[1] =  ws[1] - a*(ys[iteration%4]- h(sum))*(h(sum))*(1-h(sum))*x2;
+
+        iteration += 1;
+        a = 1000/(1000+iteration);
+      //console.log(`ws[0] == ${ws[0]} ws[1] == ${ws[1]} w2[0] == ${w2[0]} w2[1] == ${w2[0]}`);
+      //console.log(`iteration: ${iteration} proportion1: ${proportion1/iteration} proportion2: ${proportion2/iteration}`);
+
+      }
+
+      console.log(`proportionraw: ${proportion}`)
+      proportion/= iteration;
+      iterationArr.push([iteration, proportion])
+      proportion = 0;
+      iteration = 0;
+      console.log(`${ws}`);
+      a = 1000/(1000+iteration);
+      ws = [.5,.5];
+  }
+
+
+    return iterationArr;
 
 }
+
+
 
 function stochGradDesc(){
   return;
@@ -93,9 +114,15 @@ class Agent{
 
 }
 
-var holder = batchGraDesc([[0,0,1,1],[0,1,0,1],[0,0,0,1],[0,1,1,0]]); //with adder function
-var w3 = holder[0];
-var w4 = holder[1];
-var prop1 = holder[2];
-var prop2 = holder[3];
-console.log(`proportion1 : ${prop1} proportion2 : ${prop2}`);
+var iterationArr = batchGraDesc([[0,0,1,1],[0,1,0,1],[0,1,1,0]]); //learning carry node of adder function
+for(var p = 0; p < iterationArr.length; p++){
+  console.log(`iterations: ${iterationArr[p][0]} proportion correct: ${iterationArr[p][1]}`);
+}
+
+
+/*
+var ctx = document.createElement("canvas");
+ctx.width = "400";
+ctx.height = "400";
+var Chart = require('node_modules/chart.js/dist/chart.js');
+*/
