@@ -1,6 +1,7 @@
 //http://localhost:///from random import randint
 //import copy
 
+var moveres = require('./MoveResolver.js');
 
 class Player  {
     constructor(name,time){
@@ -120,7 +121,7 @@ class Piece{
 
 
 
-export class Empty extends Piece {
+class Empty extends Piece {
     constructor(color,name,location){
         super(color,name,location);
         this.url = "Empty";
@@ -139,7 +140,7 @@ export class Empty extends Piece {
     }
 }
 
-export class Knight extends Piece{
+class Knight extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -187,7 +188,7 @@ export class Knight extends Piece{
     }
 }
 
-export class Bishop extends Piece{
+class Bishop extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -281,7 +282,7 @@ export class Bishop extends Piece{
 
 }
 
-export class Pawn extends Piece{
+class Pawn extends Piece{
     constructor(color,name,location, moved){
         super(color,name,location);
         this.moved = moved;
@@ -417,7 +418,7 @@ export class Pawn extends Piece{
       }
 }
 
-export class Rook extends Piece{
+class Rook extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -523,7 +524,7 @@ export class Rook extends Piece{
 
 
 
-export class Queen extends Piece {
+class Queen extends Piece {
     constructor(color,name,location){
         super(color,name,location);
 
@@ -817,7 +818,7 @@ function yTranslate(rank){
     return parseInt(rank) - 1;
   }
 
-export class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece, x, y]
+class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece, x, y]
     constructor(time,p1name, p2name){
 
         this.p1 = new Player(p1name, time);
@@ -1461,15 +1462,28 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
       }
 }
 
-//chessGame.printGame();
+exports.Player = Player;
+exports.Knight = Knight;
+exports.Rook = Rook;
+exports.Bishop = Bishop;
+exports.Queen = Queen;
+exports.King = King;
+exports.Pawn = Pawn;
+exports.Empty = Empty;
+exports.Game = Game;
 
 /*
+var chessGame = new Game('30', 'machine1', 'machine2');
+chessGame.printGame();
+
+
+
 while(!chessGame.checkMate()){
-     var move = getMove(chessGame);
+     var move = moveres.getMove(chessGame);
      chessGame.translateExecute(move);
      chessGame.printGame();
   }
-*/
+
 
 /*
 getMove(chessGame){//should be handled by seperate user interface library at some point
