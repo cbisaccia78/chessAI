@@ -8,9 +8,10 @@ function h(sum){
 
 
 class Node {
-  constructor(inN, inSum, out, nodeOuts){
+  constructor(inN, inSum, out, nodeOuts,name){
     this.in = inN;
     this.inSum = inSum;
+    this.name = name
     this.out = out; //values of outputs connecting to each
     this.nodeOuts = nodeOuts; //which nodes does it connect to
   }
@@ -45,10 +46,11 @@ class SigmoidNet {
       for(var p = 0; p < inputs.length; p++){
         nodeiInputs.push(inputs[p][i]);
       }
-      inputLayer.push(new Node(Null, Null,nodeiInputs, Null));//set the outputs of the input nodes to be equal to the inputs
+      inputLayer.push(new Node(null, null,nodeiInputs, null, "input"));//set the outputs of the input nodes to be equal to the inputs
 
     }
     this.neuralLayers.push(inputLayer);
+    console.log(`${this.hL.length}`);
     for(i = 0; i < this.hL.length; i++){ //for each hidden layer
       var hiddenLayer = [];
       for(var p = 0; p < this.hL[i]; p++){//for each node in the hidden layer
@@ -58,13 +60,13 @@ class SigmoidNet {
           inN.push(this.neuralLayers[i][j]); //make each node in the current layer fully connected to the previous layer node
         }
 
-        var node = new Node(inN, inSum, Null, Null);
+        var node = new Node(inN, inSum, null, null, "hidden");
         hiddenLayer.push(node);
       }
       this.neuralLayers.push(hiddenLayer);
     }
     var outLayer = [];
-    for(i = 0; i < outputs.length; i++){
+    for(i = 0; i < this.outputs.length; i++){
       var outNode;
       var inN = [];
       var inSum = 0;  //default
@@ -72,10 +74,16 @@ class SigmoidNet {
       for(var p = 0; p < lengthOfLastHiddenLayer; p++){//for each node in the last hidden layer
         inN.push(this.neuralLayers[this.neuralLayers.length-1][p]);
       }
-      outNode = new Node(inN, inSum, Null, Null);
+      outNode = new Node(inN, inSum, null, null, "output");
       outLayer.push(outNode);
     }
     this.neuralLayers.push(outLayer);
+    console.log(`${this.neuralLayers.length}`);
+    for(var i = 0; i < this.neuralLayers.length; i++){
+      for(var j = 0; j < this.neuralLayers[i].length; j++){
+        console.log(this.neuralLayers[i][j].out);
+      }
+    }
 
   }
 
@@ -177,25 +185,26 @@ class SigmoidNet {
     //at this point we've set arbitrary weights in parameter space for each layer in the net
 
 
-
+    console.log('entering while loop')
     //compute the delta value for the output units using the observed error with deltak = g'(ink)*(y-h)
     var iteration = 0;
     var alpha = 1000/(1000+iteration);
-    while(iteration < 2000000){
+    while(iteration < 2000){
       //firstwe must propogate input forward.
       //walk through the net layer by layer, setting inputsum and outputs
       //first handle the input layer
-
+      console.log('set up first hidden layer');
       for(var t = 0; t < this.neuralLayers[1].length; t++){//for each hidden node in the hidden layer
         var inSum = 0;
         for(var q = 0; q < this.neuralLayers[0].length; q++){//for each node in the previous layer
-          inSum += this.neuralLayers[0][q].out[iteration%out.length]*ws[0][q]; //as you can see, out is a vector of inputs for the input layer
+          inSum += this.neuralLayers[0][q].out*ws[0][q]; //as you can see, out is a vector of inputs for the input layer
         }
         this.neuralLayers[1][t].inSum = inSum;
         this.neuralLayers[1][t].out = h(inSum);//but out is a single scalar for the hidden layers and output layer
       }
 
       //at this point we can move on to the second+ hidden layer(if need be) and the output layer
+      console.log('set up second hiden layer + output');
       var z;
       for(z = 2; z< this.neuralLayers.length; z++){//for each layer
         for(var t = 0; t < this.neuralLayers[z].length; t++){//for each node in the hidden layer
@@ -212,70 +221,59 @@ class SigmoidNet {
       //at this point, for a particular example iteration%, we have propogated the inputs forward. now we may back propagate.
       //while not at earliest HIDDEN layer:
       //    propogate the current delta values back to the previuos layer
-      //    update the weights between the two layers with the rule:   wi,j = wi,j + alpha*ai*deltaj where deltaj = g'(inj)*sumk(wj,k*deltak)    where deltak = g'(ink)*(y-h)
+
       var deltaks = [];
-      var oll = this.neuralLayers.length-1;
-      var ol= this.neuralLayers[oll].length;
-
-      for(var p = 0; p < ol; p++){
-        var ink = this.neuralLayers[oll][p].inSum; //should this insum value be changed here, or during the forward propagation?
-
+      var ol = this.neuralLayers.length-1;
+      var oll= this.neuralLayers[ol].length;
+      console.log('entering backprop');
+      for(var p = 0; p < oll; p++){//start with output layer, applying wj,k = wj,k+alpha*deltak*aj
+        var ink = this.neuralLayers[ol][p].inSum; //should this insum value be changed here, or during the forward propagation?
+        var ak = this.neuralLayers[ol][p].out;
         var y = outputs[iteration%outputs.length];
-        var ak = this.neuralLayers[oll][p].out;
         var deltak = h(ink)*(1-h(ink))*(y-ak);
-        deltaks.push(deltak);
-      }
-      
-      var deltas = [];
-      for(var k = this.neuralLayers.length-2; k >= 2; k--){//start with output later, applying wj,k = wj,k + alpha*deltak*aj for each j in the previous layer
-        for(var q = 0; q < this.neuralLayers[k].length; q++){
-          var ink = this.neuralLayers[k][q].inSum; //should this insum value be changed here, or during the forward propagation?
-
-          var y = outputs[iteration%outputs.length];
-          var ak = this.neuralLayers[k][q].out;
-          var deltak = h(ink)*(1-h(ink))*(y-ak);
-          for(var r = 0; r < this.neuralLayers[k-1].length; r++){
-            var aj = this.neuralLayers[k-1][r].out;
-            ws[ws.length-1][r] += alpha*deltak*aj; //changing the weights at the last hidden layer before the outputs (wj,k)
-          }
-          deltas.push(deltak);
-          //go to next output node
+        //deltaks.push(deltak);
+        for(var q = 0; q < this.neuralLayers[ol-1].length; q++){
+          var aj = this.neuralLayers[ol-1][q].out;
+          ws[ol-1][q] += alpha*aj*deltak;
         }
-        //at this point delta ks are ready to be backpropagated
 
-        var i;
-        for(var k = hL.length+1; k >= 2; k--){//for all layers k starting at the output layer
+        var deltajs = [];
+          //    update the weights between the two layers with the rule:   wi,j = wi,j + alpha*ai*deltaj where deltaj = g'(inj)*sumk(wi,j*deltak)    where deltak = g'(ink)*(y-h)
+        console.log('entering backprop');
+        for(var j = this.neuralLayers.length-2; j >= 1; j--){//for each j layer update the weights between the i and j nodes
+          for(var q = 0; q < this.neuralLayers[j].length; q++){//for each node in the j layer
 
-          var j = k-1;
-          var deltaJs = [];
-          for(var h = 0; h < this.neuralLayers[j].length; j++){//for each node in the j layer update its wi,j values
-            var inj = this.neuralLayers[j][h].inSum;
-            var gPinj = h(inj)*(1-h(inj));
+            var inj = this.neuralLayers[j][q].inSum; //should this insum value be changed here, or during the forward propagation?
+            var gPinJ = h(inj)*(1-h(inj));
+
+
+            //    update the weights between the two layers with the rule:   wi,j = wi,j + alpha*ai*deltaj where deltaj = g'(inj)*sumk(wj,k*deltak)    where deltak = g'(ink)*(y-h)
             var sumk = 0;
-            for(var d = 0; d <  this.neuralLayers[k].length; d++){
-              //for each k node propogate back deltak value
-              //calculate sumk(wj,k*deltak)
-              sumk += ws[j-1][h]*deltaKs[d];
+            for(var o = 0; o < oll; o++){
+              sumk += ws[j][o]*deltak;
             }
-            var deltaj = gPinj*sumk;
-            deltaJs.push(deltaj);
 
-            for(var n = 0; n < this.neuralLayers[j-1].length; n++){//for each node in the j-1 layer
-              var ai = this.neuralLayers[j-1][n].out;
-              //calculate wj,k sum here where k = j+1
-              ws[j-1][n] += alpha*ai*deltaj;
-            } //at this point all wi,js for a particular j node have been updated
+            var deltaj = gPinJ*sumk;
 
-          }//go to the next j node
-          deltaKs = deltaJs;//get ready to drop down a layer
-        }//drop down a layer
-      } //starting at the output layer
+            for(var r = 0; r < this.neuralLayers[j-1].length; r++){//for each node in the i layer
+              var ai = this.neuralLayers[j-1][r].out;
+              ws[j-1][r] += alpha*deltaj*ai; //changing the weights at the last hidden layer before the outputs (wj,k)
+            }
+            //deltajs.push(deltak);
+            //go to next output node
+          }
+          //at this point delta ks are ready to be backpropagated=
+        }
+        console.log('going to the next output node');
+
+      }
+      console.log('restarting backprop');
 
       iteration += 1;
-  }
-    //start with output layer, applying wj,k = wj,k+alpha*deltak*aj
 
   }
+
+}
 
 
 
@@ -318,21 +316,21 @@ function getmove(game){
   */
 }
 
-var inputs = [];
+var inputs = []; // [[0,0,0,0,0], [0,0,0,0,1], ... , [1, 1, 1, 1, 0], [1, 1, 1, 1, 1]]
+var outputss = []; //[0,1,....,0,0,1]
 var outputs = [];
-
 for(var i = 0; i < 2; i++){//implement majority function with 5 slots for all 2^5 combinations
   for(var j = 0; j < 2; j++){
     for(var k = 0; k < 2; k++){
       for(var l = 0; l < 2; l++){
         for(var m = 0; m < 2; m++){
             inputs.push([i, j, k, l, m]);
-            console.log(`${[i, j, k, l, m]} `);
+            //console.log(`${[i, j, k, l, m]} `);
             if((i+j+k+l+m) >= 3){
-              console.log(`${1}`);
+              //console.log(`${1}`);
               outputs.push(1);
             }else{
-              console.log(`${0}`);
+              //console.log(`${0}`);
               outputs.push(0);
             }
         }
@@ -341,10 +339,9 @@ for(var i = 0; i < 2; i++){//implement majority function with 5 slots for all 2^
   }
 }
 //console.log(`${inputs} ${outputs}`);
+outputss.push(outputs);
 
-
-var signet = new SigmoidNet(inputs,[2,2],outputs);
-signet.createNet();
+var signet = new SigmoidNet(inputs,[2],outputss);//try it with 1 hidden layer
 signet.backPropLearning();
 /*
 var iterationArr = signet.batchGraDesc(); //learning carry node of adder function
