@@ -30,50 +30,7 @@ class Player  {
         return this.check;
     }
 
-    generateMoves(game){
-      var ar = this.pieces;
-      var moves = [];
-      var m;
-      for(m = 0; m < ar.length; m++){
-        var element = ar[m];
-        //console.log(`element = ${element.name}`);
-        var i;
-        var j;
-        console.log(`legal moves for ${element.id} ${element.name}`);
-        for(i = 0; i < 8; i++){
-          for(j = 0; j < 8; j++){
-            //console.log(`checking`);
-            var legal = false;
-            if(element.legalPattern([i,j], this.game) == true){
-              //console.log(`${element.name} (${element.location[0]},${element.location[1]}) => (${i},${j})`);
-              if(this.selfCheck([element, i, j]) == false){
-                //console.log(`${element.name} can move to (${i}, ${j})`);
-                legal = true;
-              }
-            }
-            var y0 = element.location[1];
-            var x0 = element.location[0];
-            if(this.game[y0][x0].name == "pawn" && this.game[y0][x0].takePassant == true){
-              console.log('undoing takepassant in checkmate');
-              this.game[y0][x0].takePassant = false;
-              this.game[y0][i].passantable = false;
-              //need to add setPiece here?
-            }
 
-            if(this.game[y0][x0].name == "king" && this.game[y0][x0].justCastled == true){
-              this.game[y1][x1].justCastled = false;
-              this.setPiece(this.game[y1][x1]);
-            }
-
-            if(legal){
-              moves.push([element, i, j]);
-            }
-          }
-        }
-      }
-
-      return moves;
-    }
 }
 
 class Piece{
@@ -1296,7 +1253,50 @@ export class Game{//    Game.move([piece, x, y])      #move is defined as move =
       }
 
 
+      generateMoves(){
+        var ar = this.getPlayer(this.turn).pieces;
+        var moves = [];
+        var m;
+        for(m = 0; m < ar.length; m++){
+          var element = ar[m];
+          //console.log(`element = ${element.name}`);
+          var i;
+          var j;
+          console.log(`legal moves for ${element.id} ${element.name}`);
+          for(i = 0; i < 8; i++){
+            for(j = 0; j < 8; j++){
+              //console.log(`checking`);
+              var legal = false;
+              if(element.legalPattern([i,j], this.game) == true){
+                //console.log(`${element.name} (${element.location[0]},${element.location[1]}) => (${i},${j})`);
+                if(this.selfCheck([element, i, j]) == false){
+                  //console.log(`${element.name} can move to (${i}, ${j})`);
+                  legal = true;
+                }
+              }
+              var y0 = element.location[1];
+              var x0 = element.location[0];
+              if(this.game[y0][x0].name == "pawn" && this.game[y0][x0].takePassant == true){
+                console.log('undoing takepassant in checkmate');
+                this.game[y0][x0].takePassant = false;
+                this.game[y0][i].passantable = false;
+                //need to add setPiece here?
+              }
 
+              if(this.game[y0][x0].name == "king" && this.game[y0][x0].justCastled == true){
+                this.game[y1][x1].justCastled = false;
+                this.setPiece(this.game[y1][x1]);
+              }
+
+              if(legal){
+                moves.push([element, i, j]);
+              }
+            }
+          }
+        }
+
+        return moves;
+      }
 
     printGame(){
         for(var i = 0; i < 8; i++){
