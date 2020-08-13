@@ -31,6 +31,17 @@ class Player  {
         return this.check;
     }
 
+    deepCopy(){
+      var newPlayer = new Player(this.name, this.time);
+      newPlayer.color = this.color;
+      for(var i = 0; i < this.pieces.length; i++){
+        newPlayer.pieces.push(this.pieces[i].deepCopy());
+      }
+      newPlayer.check = this.check;
+      newPlayer.inCheck = this.inCheck;
+      return newPlayer;
+    }
+
 
 }
 
@@ -812,8 +823,16 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
     }
 
     deepCopy(){
-      var newObject = JSON.stringify(this);
-      return JSON.parse(newObject);
+      var newGame = new Game(this.time, this.p1name, this.p2name);
+      newGame.p1 = this.p1.deepCopy();
+      newGame.p2 = this.p2.deepCopy();
+      newGame.color = this.color;
+      newGame.turn = this.turn;
+      newGame.previousPassant = this.previousPassant.deepCopy();
+      for(var i = 0; i < this.promotions.length; i++){
+        newGame.promotions.push(this.promotions[i].deepCopy());
+      }
+      return newGame;
     }
     getPlayer(color){
         ////.log(`this.p1.color == ${this.p1.color}`)
@@ -1261,7 +1280,7 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
       }
 
       movePieceUpdate(move){
-        movePiece(move)
+        this.movePiece(move);
         return this.deepCopy();
 
       }

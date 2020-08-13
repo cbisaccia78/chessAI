@@ -418,14 +418,52 @@ function stochGradDesc(){
   return;
 }
 
+function bitConversion(piece){
+  if(piece.color == "white"){
+    if(piece.name == "pawn"){
+      return 1;
+    }else if(piece.name == "rook"){
+      return 2;
+    }else if(piece.name == "bishop"){
+      return 3;
+    }else if(piece.name == "knight"){
+      return 4;
+    }else if(piece.name == "queen"){
+      return 5;
+    }else if(piece.name == "king"){
+      return 6;
+    }else{
+      return 0;
+    }
+  }else{
+    if(piece.name == "pawn"){
+      return -1;
+    }else if(piece.name == "rook"){
+      return -2;
+    }else if(piece.name == "bishop"){
+      return -3;
+    }else if(piece.name == "knight"){
+      return -4;
+    }else if(piece.name == "queen"){
+      return -5;
+    }else if(piece.name == "king"){
+      return -6;
+    }else{
+      return 0;
+    }
+  }
 
+}
 function generateBitBoard(game, move){
-  var newGame = game.movePieceUpdate(move);
+  var newGame = game.movePieceUpdate(move);//will this change game?
   var bitboard = [];
   for(var i = 0; i < 8; i++){
+    row = [];
     for(var j = 0; j < 8; j++){
-      bitboard[j][i] = newGame.game[j][i].name
+      row.push(bitConversion(newGame.game[j][i]));
     }
+    bitboard.push(row);
+    console.log(bitboard);
   }
   return bitboard
 }
@@ -435,18 +473,18 @@ function generateBitBoard(game, move){
 function getmove(game){
 
   var player = game.getPlayer(game.turn);
-  var moves = player.generateMoves(game);
+  var moves = game.generateMoves();
 
   var i;
   var bestHSoFar = 0;
-  var bestMoveSoFar;
+  var bestMoveSoFar = 0;
   for(i = 0; i < moves.length; i++){
     var gameCopy = game.deepCopy();
+    console.log(gameCopy);
     var bitboard = generateBitBoard(gameCopy, moves[i]);
     //evaluate bitboard
     //if bitboard evaluation > best so far
     //move i = bestmovesofar
-    continue;
 
   }
 
@@ -479,17 +517,7 @@ for(var i = 0; i < 2; i++){//implement majority function with 5 slots for all 2^
 }
 */
 
-//generate bitboard
-var bitboard = [];
-for(var i = 0; i < 8; i++){
-  for(var j = 0; j < 8; j++){
-    if(j == 0){
 
-    }else if(j == 1){
-
-    }
-  }
-}
 
 //console.log(`${inputs} ${outputs}`);
 //outputss.push(outputs);
@@ -502,10 +530,12 @@ var game = new statemanager.Game("computer", "computer", 5);
 var p = game.getPlayer(game.turn);
 
 
+
 var move = getmove(game)
 
 
 //var moves = game.generateMoves();
+//var newGame = game.movePieceUpdate(moves[0]);
 /*
 for(var i = 0; i < moves.length; i++){
 
