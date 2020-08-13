@@ -304,7 +304,7 @@ class SigmoidNet {
 
   }
 
-  bookBackProp(){
+  backProp(){
 
 
     //inputs: examples, a set of examples, each with input vector x and output vector y
@@ -418,14 +418,22 @@ function stochGradDesc(){
   return;
 }
 
-function heuristic(game, move){
-  return 1;
+
+function generateBitBoard(game, move){
+  var newGame = game.movePieceUpdate(move);
+  var bitboard = [];
+  for(var i = 0; i < 8; i++){
+    for(var j = 0; j < 8; j++){
+      bitboard[j][i] = newGame.game[j][i].name
+    }
+  }
+  return bitboard
 }
 
 
 
 function getmove(game){
-  /*
+
   var player = game.getPlayer(game.turn);
   var moves = player.generateMoves(game);
 
@@ -433,17 +441,20 @@ function getmove(game){
   var bestHSoFar = 0;
   var bestMoveSoFar;
   for(i = 0; i < moves.length; i++){
-    var h = heuristic(game, moves[i])
-    if(heuristic(game,moves[i]) > bestSoFar){
-      bestSoFar = h;
-      bestMoveSoFar = moves[i];
-    }
+    var gameCopy = game.deepCopy();
+    var bitboard = generateBitBoard(gameCopy, moves[i]);
+    //evaluate bitboard
+    //if bitboard evaluation > best so far
+    //move i = bestmovesofar
+    continue;
+
   }
 
   return bestMoveSoFar;
-  */
+
 }
 
+/*
 var inputs = []; // [[0,0,0,0,0], [0,0,0,0,1], ... , [1, 1, 1, 1, 0], [1, 1, 1, 1, 1]]
 var outputss = []; //[0,1,....,0,0,1]
 var outputs = [];
@@ -466,24 +477,38 @@ for(var i = 0; i < 2; i++){//implement majority function with 5 slots for all 2^
     }
   }
 }
-//console.log(`${inputs} ${outputs}`);
-outputss.push(outputs);
+*/
 
-var signet = new SigmoidNet(inputs,[5,5],outputss);//try it with 1 hidden layer
-signet.bookBackProp();
-/*
-var iterationArr = signet.batchGraDesc(); //learning carry node of adder function
-for(var p = 0; p < iterationArr.length; p++){
-  console.log(`iterations: ${iterationArr[p][0]} proportion correct: ${iterationArr[p][1]}`);
+//generate bitboard
+var bitboard = [];
+for(var i = 0; i < 8; i++){
+  for(var j = 0; j < 8; j++){
+    if(j == 0){
+
+    }else if(j == 1){
+
+    }
+  }
 }
 
+//console.log(`${inputs} ${outputs}`);
+//outputss.push(outputs);
+
+//var signet = new SigmoidNet(inputs,[5,5],outputss);//try it with 1 hidden layer
+//signet.backProp();
 
 
+var game = new statemanager.Game("computer", "computer", 5);
+var p = game.getPlayer(game.turn);
 
 
+var move = getmove(game)
+
+
+//var moves = game.generateMoves();
 /*
-var ctx = document.createElement("canvas");
-ctx.width = "400";
-ctx.height = "400";
-var Chart = require('node_modules/chart.js/dist/chart.js');
+for(var i = 0; i < moves.length; i++){
+
+  console.log(moves[i]);
+}
 */
