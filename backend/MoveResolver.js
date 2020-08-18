@@ -338,7 +338,10 @@ function getmove(game, sigmoidNet){
 
   var player = game.getPlayer(game.turn);
   var moves = game.generateMoves();
-
+  if(moves.length == 0){
+    //stalemate reached
+    return null;
+  }
   var i;
   var bestHSoFar = 0;
   var bestMoveSoFar = 0;
@@ -347,13 +350,14 @@ function getmove(game, sigmoidNet){
     //console.log(gameCopy);
     var bitboard = generateBitBoard(gameCopy, moves[i]);
     //console.log(bitboard);
-    //evaluate bitboard
-    //if bitboard evaluation > best so far
-    //move i = bestmovesofar
-
+    var eval = sigmoidNet.forwardProp(bitboard);
+    if(eval > bestHSoFar){
+      bestHSoFar = eval;
+      bestMoveSoFar = i;
+    }
   }
 
-  return bestMoveSoFar;
+  return moves[bestMoveSoFar];
 
 }
 
@@ -388,22 +392,13 @@ for(var i = 0; i < 2; i++){//implement majority function with 5 slots for all 2^
 //outputss.push(outputs);
 
 var signet = new SigmoidNet([[1,1,1]],[5,5],[1]);//try it with 1 hidden layer
-signet.forwardProp(signet.initialBitboard);
+//signet.forwardProp(signet.initialBitboard);
 
 
 var game = new statemanager.Game("computer", "computer", 5);
 var p = game.getPlayer(game.turn);
 
-
-
-var move = getmove(game)
-
-
-//var moves = game.generateMoves();
-//var newGame = game.movePieceUpdate(moves[0]);
-/*
-for(var i = 0; i < moves.length; i++){
-
-  console.log(moves[i]);
+while(!game.checkMate()){
+  var move = getmove(game, signet);
+  console.log(move);
 }
-*/
