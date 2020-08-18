@@ -330,7 +330,7 @@ class Pawn extends Piece{
                       //.log("evaluating possible en passant");
                         ////.log(`piece at (${x2}, ${y1}) = ${game[y1][x2].name} ${game[y1][x2].passantable}`);
                         if(game[y1][x2].name == "pawn" && game[y1][x2].color != this.getColor() && game[y1][x2].passantable == true){
-                          console.log('changing takepassant value at 322');
+                          //console.log('changing takepassant value at 322');
                           game[y1][x1].takePassant = true;
                           this.takePassant = true;
                           return true;
@@ -832,6 +832,11 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
       for(var i = 0; i < this.promotions.length; i++){
         newGame.promotions.push(this.promotions[i].deepCopy());
       }
+      for(var p = 0; p < this.game.length; p++){
+        for(var q = 0; q < this.game[p].length; q++){
+          newGame.game[p][q] = this.game[p][q].deepCopy();
+        }
+      }
       return newGame;
     }
     getPlayer(color){
@@ -1280,15 +1285,19 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
       }
 
       movePieceUpdate(move){
+        //console.log(this);
         this.movePiece(move);
-        return this.deepCopy();
+        //console.log('after');
+        //console.log(this);
+        var copy = this.deepCopy();
+        return copy;
 
       }
 
 
       generateMoves(){
         var ar = this.getPlayer(this.turn).pieces;
-        console.log(ar);
+        //console.log(ar);
         var moves = [];
         var m;
         for(m = 0; m < ar.length; m++){
@@ -1307,19 +1316,19 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
                 if(element.name == "pawn"){
 
                 }
-                console.log(ar);
-                console.log('at 1273');
+                //console.log(ar);
+                //console.log('at 1273');
                 if(this.selfCheck([element, i, j]) == false){
                   ////.log(`${element.name} can move to (${i}, ${j})`);
-                  console.log(ar);
-                  console.log('at 1277');
+                //  console.log(ar);
+                  //console.log('at 1277');
                   legal = true;
                 }
               }
               var y0 = element.location[1];
               var x0 = element.location[0];
               if(this.game[y0][x0].name == "pawn" && this.game[y0][x0].takePassant == true){
-                console.log('undoing takepassant in checkmate');
+                //console.log('undoing takepassant in checkmate');
                 this.game[y0][x0].takePassant = false;
                 var yoffset;
                 if(element.color == "white"){
