@@ -186,7 +186,7 @@ class SigmoidNet {
         for(var k = 0; k < 13; k++){//for each node in a cluster j
           //console.log(`bitboard[${i}][${j}] = ${bitboard[i][j]}`)
           this.neuralLayers[0][i].out = bitToInputNodeOutput(k-6, this.bitboard[i][j]);
-          console.log(this.neuralLayers[0][i]);
+          //console.log(this.neuralLayers[0][i]);
         }
       }
 
@@ -221,8 +221,9 @@ class SigmoidNet {
         this.neuralLayers[l][j].out = h(inj);
       }
     }
-    console.log(this.neuralLayers[this.neuralLayers.length-1]);
+    //console.log(this.neuralLayers[this.neuralLayers.length-1]);
 
+    return this.neuralLayers[this.neuralLayers.length-1][0].out;
   }
 
 
@@ -353,11 +354,16 @@ function getmove(game, sigmoidNet){
     var eval = sigmoidNet.forwardProp(bitboard);
     if(eval > bestHSoFar){
       bestHSoFar = eval;
-      bestMoveSoFar = i;
+      bestMoveSoFar = [];
+      bestMoveSoFar.push(i);
+    }
+    if(eval == bestHSoFar){
+      bestHSoFar = eval;
+      bestMoveSoFar.push(i);
     }
   }
 
-  return moves[bestMoveSoFar];
+  return moves[bestMoveSoFar[Math.floor((Math.random()*bestMoveSoFar.length-1) +1)]];
 
 }
 
@@ -397,8 +403,12 @@ var signet = new SigmoidNet([[1,1,1]],[5,5],[1]);//try it with 1 hidden layer
 
 var game = new statemanager.Game("computer", "computer", 5);
 var p = game.getPlayer(game.turn);
-
-while(!game.checkMate()){
+var count = 0;
+while(count < 10){
   var move = getmove(game, signet);
+  console.log(`chosen move is: `);
   console.log(move);
+  game = game.movePieceUpdate(move);
+  count++;
+  
 }
