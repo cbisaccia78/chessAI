@@ -345,7 +345,7 @@ class Pawn extends Piece{
                 if(this.passantable == true){
                   game[y1][x1].passantable = false;
                 }
-                if((game[y2][x2].getColor() == "null")){
+                if((game[y2][x2].color == "null")){
                     //add a variable to represent a pawn that just queened
                     return true;
                 }
@@ -746,13 +746,29 @@ class King extends Piece{
           if(this.color == "black"){
             y = 0;
           }
-          while(x != x2){
-            if(game[y][x].name != "empty"){
-              ////.log('piece in the way');
-              return false;
+          var stoppingValue = x2;
+          if(xdiff < 0){
+            //long castle
+            stoppingValue = x2-1;
+            while(x >= stoppingValue){
+              console.log(`checking for piece ${game[y][x].name} in the way`);
+              if(!(game[y][x].name === "empty")){
+                ////.log('piece in the way');
+                return false;
+              }
+              x = x + reflectX;
             }
-            x = x + reflectX;
+          }else{
+            while(x <= stoppingValue){
+              console.log(`checking for piece ${game[y][x].name} in the way`);
+              if(!(game[y][x].name === "empty")){
+                ////.log('piece in the way');
+                return false;
+              }
+              x = x + reflectX;
+            }
           }
+          console.log('valid castle');
           this.justCastled = true;
           //set pieces king to true as well
           return true;
@@ -909,9 +925,9 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
 
         var tempPawn;
 
-        if(this.game[y1][x1].name == "king" && this.game[y1][x1].justCastled == true){
+        if(this.getKing(color).justCastled == true){
 
-          //.log('king justCastled true');
+          console.log('king justCastled true');
           this.setPiece(this.game[y1][x1]);
           var tempKing;
           var rookCords;
@@ -1073,6 +1089,8 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
         if(this.getKing(color).justCastled == true){
           ////.log('881');
           ////.log(`(${tempRook.location[1]}, ${tempRook.location[0]})`);
+          console.log(color);
+          console.log(move);
           this.game[tempRook.location[1]][tempRook.location[0]] = tempRook;
           if(this.p1.color == color){
             this.p1.pieces[tempRook.pieceLoc] = tempRook.deepCopy();
@@ -1150,7 +1168,7 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
               moveholder[1] = this.game[y0][x1].id;
               this.game[y0][x1].removed = true;
               this.game[y0][x0].takePassant = false;
-              this.setPiece(this.game[y0][x1])
+              this.setPiece(this.game[y0][x1]);
             }
 
 
@@ -1313,9 +1331,7 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
               var legal = false;
               if(element.legalPattern([i,j], this.game) == true){
                 ////.log(`${element.name} (${element.location[0]},${element.location[1]}) => (${i},${j})`);
-                if(element.name == "pawn"){
 
-                }
                 //console.log(ar);
                 //console.log('at 1273');
                 if(this.selfCheck([element, i, j]) == false){
@@ -1336,7 +1352,9 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
                 }else{
                   yoffset = 1;
                 }
-                this.game[y0+yoffset][i].passantable = false;
+                console.log(element);
+                console.log(`${i}, ${j}`);
+                this.game[y0+yoffset][i].passantable = false; //error
                 ar[m].passantable = false;
                 ar[m].takePassant = false;
                 if(this.p1.color == element.color){
@@ -1352,6 +1370,19 @@ class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece
               if(this.game[y0][x0].name == "king" && this.game[y0][x0].justCastled == true){
                 this.game[y1][x1].justCastled = false;
                 ar[m].justCastled = false;
+                element.justCastled = false;
+                if(this.p1.color == element.color){
+                  this.p1.pieces = ar;
+                }else{
+                  this.p2.pieces = ar;
+                }
+              }
+              if(this.game[y0][x0].name != "king" && this.getKing().justCastled == true){
+                var xk = this.getKing().location[0];
+                var yk = this.getKing().location[1];
+                this.game[yk][xk].justCastled = false;
+                ar[m].justCastled = false;
+                element.justCastled = false;
                 if(this.p1.color == element.color){
                   this.p1.pieces = ar;
                 }else{

@@ -63,7 +63,7 @@ function generateBitBoard(game, move){
     bitboard.push(row);
   }
   //console.log(bitboard);
-  return bitboard
+  return bitboard;
 }
 
 function generateInitialBitboard(game){
@@ -341,6 +341,7 @@ function getmove(game, sigmoidNet){
   var moves = game.generateMoves();
   if(moves.length == 0){
     //stalemate reached
+    console.log('no more moves!');
     return null;
   }
   var i;
@@ -404,11 +405,13 @@ var signet = new SigmoidNet([[1,1,1]],[5,5],[1]);//try it with 1 hidden layer
 var game = new statemanager.Game("computer", "computer", 5);
 var p = game.getPlayer(game.turn);
 var count = 0;
-while(count < 10){
+while(count < 10000){
+  console.log(`count = ${count}`);
   var move = getmove(game, signet);
   console.log(`chosen move is: `);
   console.log(move);
   game = game.movePieceUpdate(move);
+  console.log(`justcastled = ${game.getKing().justCastled}`);
   count++;
-  
+
 }
