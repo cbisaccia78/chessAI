@@ -1,29 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1856fda1-edd5-4667-ac42-b84ecf10a285" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/app/static/js/init.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/app/templates/game.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="1856fda1-edd5-4667-ac42-b84ecf10a285" name="Default Changelist" comment="refactoring to flask from node.js">
+      <change afterPath="$PROJECT_DIR$/app/static/js/gameConfig.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_bdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_bdt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_blt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_blt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_kdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_kdt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_klt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_klt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_ndt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_ndt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_nlt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_nlt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_pdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_pdt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_plt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_plt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_qdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_qdt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_qlt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_qlt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_rdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_rdt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_rlt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_rlt60.png" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/runGame.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/js/MoveResolver.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/MoveResolver.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/js/StateManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/StateManager.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/js/runGame.js" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/public/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/test.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/app/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/run.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/static/js/runGame.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/runGame.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/training.html" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +47,14 @@
       <option name="presentableId" value="Default" />
       <updated>1608682038796</updated>
     </task>
+    <task id="LOCAL-00001" summary="refactoring to flask from node.js">
+      <created>1610221789408</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1610221789408</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="UnknownFeatures">
@@ -80,5 +70,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="refactoring to flask from node.js" />
+    <option name="LAST_COMMIT_MESSAGE" value="refactoring to flask from node.js" />
   </component>
 </project>

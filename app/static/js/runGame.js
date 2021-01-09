@@ -29,7 +29,7 @@ function sleep(milliseconds) {
 
 
 function clickListener(event){
-  console.log('i');
+  if (debug_output) console.log('i');
 
 
 
@@ -43,13 +43,13 @@ function clickListener(event){
   var pX = _piece.location[0];
   var pY = _piece.location[1];
 
-  console.log(`in clicklistener at (${baseX}, ${baseY}) and (${pX}, ${pY})`);
+  if (debug_output) console.log(`in clicklistener at (${baseX}, ${baseY}) and (${pX}, ${pY})`);
 
   if(baseY - pY != 0){
-    console.log('invalid promotion selection in the y direction');
+    if (debug_output) console.log('invalid promotion selection in the y direction');
     return;
   }
-  console.log('i');
+  if (debug_output) console.log('i');
 
   if(baseX - pX == 0){
     //pawn
@@ -77,7 +77,7 @@ function clickListener(event){
     promotedPiece = new Queen(`${_piece.color}`, `queen`, _piece.location);
     promotedPiece.id = `pq${promotedNum}`;
   }else{
-    console.log('invalid promotion selection in the X direction');
+    if (debug_output) console.log('invalid promotion selection in the X direction');
     return;
   }
 
@@ -181,7 +181,7 @@ function drop(event){
   }
   var x = event.clientX;
   var y = event.clientY;
-  console.log('wants a drop at'.concat(x,y));
+  if (debug_output) console.log('wants a drop at'.concat(x,y));
 
   var baseX = (Math.floor(x / 100));
   var baseY = (Math.floor(y / 100));
@@ -190,7 +190,7 @@ function drop(event){
     return;
   }
   if(chessGame.turn != _piece.color){
-    console.log('not ur turn');
+    if (debug_output) console.log('not ur turn');
     clicked = false;
     currentImage.setAttribute('x', ((_piece.location[0])*100).toString());
     currentImage.setAttribute('y', ((_piece.location[1])*100).toString());
@@ -198,8 +198,8 @@ function drop(event){
   }
 
 
-  console.log(`moving to (${baseX},${baseY})`);
-  console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
+  if (debug_output) console.log(`moving to (${baseX},${baseY})`);
+  if (debug_output) console.log(`${_piece.id} at (${_piece.location[0]},${_piece.location[1]})`);
 
 
   var movingTo = chessGame.game[baseY][baseX].deepCopy();
@@ -210,18 +210,18 @@ function drop(event){
 
   var rook;
   if(move.length == 4){
-    console.log('castling');
+    if (debug_output) console.log('castling');
     _piece = move[3];
     rook = move[2];
   }
-  console.log(`${_piece.id} moving to (${_piece.location[0]},${_piece.location[1]})`);
+  if (debug_output) console.log(`${_piece.id} moving to (${_piece.location[0]},${_piece.location[1]})`);
   //console.log(`${chessGame.game[0][4].id}`);
   //_piece = chessGame.game[baseY][baseX];
   //after movePiece the coordinates of the chessGame reflect the move
   //currentImage.setAttribute('x', baseX.toString());
   //currentImage.setAttribute('y', baseY.toString());
   if(move[0] == true){
-    console.log(`removing child with id ${move[1]}`);
+    if (debug_output) console.log(`removing child with id ${move[1]}`);
     document.getElementById(move[1]).setAttribute("style", "visibility:hidden");
   }
 
@@ -231,7 +231,7 @@ function drop(event){
 
 
   if(_piece.name == "pawn" && (_piece.color == "white" && baseY == 0)){
-    console.log('pawn promition:');
+    if (debug_output) console.log('pawn promition:');
     //set up selection
     var left = (_piece.location[0])*100;
     var to = (_piece.location[1])*100;
@@ -312,7 +312,7 @@ function drop(event){
 
   }
   if(_piece.name == "pawn" && (_piece.color == "black" && baseY == 7)){
-    console.log('pawn promition:');
+    if (debug_output) console.log('pawn promotion:');
     //set up selection
     var left = (_piece.location[0])*100;
     var to = (_piece.location[1])*100;
@@ -384,7 +384,7 @@ function drop(event){
 
 
   if(move.length == 4){
-    console.log(`rook id = ${rook.id}`);
+    if (debug_output) console.log(`rook id = ${rook.id}`);
     var rookImage = document.getElementById(rook.id);
     rookImage.setAttribute('x', ((rook.location[0])*100).toString());
     rookImage.setAttribute('y', ((rook.location[1])*100).toString());
@@ -392,19 +392,19 @@ function drop(event){
 
   //if the drop is legal: then good
   //else, revert the img coordinates to go back to lastX, lastY
-  console.log('drop!');
+  if (debug_output) console.log('drop!');
   clicked = false;
   checkM = chessGame.checkMate();
   if(checkM == true){
     //stop input and display game over stuff
-    console.log(`checkmate`);
+    if (debug_output) console.log(`checkmate`);
     var checkMateScreen = document.createElementNS("http://www.w3.org/2000/svg","rect");
     checkMateScreen.setAttribute('x', '200');
     checkMateScreen.setAttribute('y', '200');
     checkMateScreen.setAttribute('style', 'width: 400px; height: 400px; fill:blue;');
     cont.appendChild(checkMateScreen);
   }else{
-    console.log(`not Checkmate`);
+    if (debug_output) console.log(`not Checkmate`);
   }
 
   }
@@ -424,7 +424,7 @@ function dragStart(event){
   //console.log(`${chessGame.game[0][4].id}`);
   lastX = x;
   lastY = y;
-  console.log('start at'.concat(x,y));
+  if (debug_output) console.log('start at'.concat(x,y));
   var baseX = Math.floor(x / 100);
   var baseY = Math.floor(y / 100);
   //var index = baseX*7 + baseY;
@@ -435,9 +435,9 @@ function dragStart(event){
   currentImageUrl = _piece.url;
   id = _piece.id;
   currentImage = document.getElementById(id);
-  console.log(_piece.id);
-  console.log(`x coord: ${_piece.location[0]} y coord: ${_piece.location[1]}`);
-  console.log(`${currentImageUrl}`);
+  if (debug_output) console.log(_piece.id);
+  if (debug_output) console.log(`x coord: ${_piece.location[0]} y coord: ${_piece.location[1]}`);
+  if (debug_output) console.log(`${currentImageUrl}`);
   //create copy of draggable image and make the old image slightly transparent
 
 
