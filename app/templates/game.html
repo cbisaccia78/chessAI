@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+</head>
+
+<body id = "body">
+
+
+
+
+<svg id = "contain" width = "800" height = "800">
+  <defs>
+    <filter id = "f1" x = "0" y = "0">
+      <feGaussianBlur in="SourceGraphic" stdDeviation="15" />
+    </filter>
+
+  </defs>
+
+
+  <image id = "a7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "0" y = "100"></image>
+  <image id = "b7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "100" y = "100"></image>
+  <image id = "c7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "200" y = "100"></image>
+  <image id = "d7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "300" y = "100"></image>
+  <image id = "e7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "400" y = "100"></image>
+  <image id = "f7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "500" y = "100"></image>
+  <image id = "g7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "600" y = "100"></image>
+  <image id = "h7p" href = "{{ url_for('static', filename='images/Chess_pdt60.png') }}" width = "100" height = "100" x = "700" y = "100"></image>
+  <image id = "a8r" href = "{{ url_for('static', filename='images/Chess_rdt60.png') }}" width = "100" height = "100" x = "0" y = "0"></image>
+  <image id = "b8kn" href = "{{ url_for('static', filename='images/Chess_ndt60.png') }}" width = "100" height = "100" x = "100" y = "0"></image>
+  <image id = "c8b" href = "{{ url_for('static', filename='images/Chess_bdt60.png') }}" width = "100" height = "100" x = "200" y = "0"></image>
+  <image id = "d8q" href = "{{ url_for('static', filename='images/Chess_qdt60.png') }}" width = "100" height = "100" x = "300" y = "0"></image>
+  <image id = "e8k" href = "{{ url_for('static', filename='images/Chess_kdt60.png') }}" width = "100" height = "100" x = "400" y = "0"></image>
+  <image id = "f8b" href = "{{ url_for('static', filename='images/Chess_bdt60.png') }}" width = "100" height = "100" x = "500" y = "0"></image>
+  <image id = "g8kn" href = "{{ url_for('static', filename='images/Chess_ndt60.png') }}" width = "100" height = "100" x = "600" y = "0"></image>
+  <image id = "h8r" href = "{{ url_for('static', filename='images/Chess_rdt60.png') }}" width = "100" height = "100" x = "700" y = "0"></image>
+
+  <image id = "a2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "0" y = "600"></image>
+  <image id = "b2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "100" y = "600"></image>
+  <image id = "c2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "200" y = "600"></image>
+  <image id = "d2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "300" y = "600"></image>
+  <image id = "e2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "400" y = "600"></image>
+  <image id = "f2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "500" y = "600"></image>
+  <image id = "g2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "600" y = "600"></image>
+  <image id = "h2p" href = "{{ url_for('static', filename='images/Chess_plt60.png') }}" width = "100" height = "100" x = "700" y = "600"></image>
+  <image id = "a1r" href = "{{ url_for('static', filename='images/Chess_rlt60.png') }}" width = "100" height = "100" x = "0" y = "700"></image>
+  <image id = "b1kn" href = "{{ url_for('static', filename='images/Chess_blt60.png') }}" width = "100" height = "100" x = "100" y = "700"></image>
+  <image id = "c1b" href = "{{ url_for('static', filename='images/Chess_nlt60.png') }}" width = "100" height = "100" x = "200" y = "700"></image>
+  <image id = "d1q" href = "{{ url_for('static', filename='images/Chess_qlt60.png') }}" width = "100" height = "100" x = "300" y = "700"></image>
+  <image id = "e1k" href = "{{ url_for('static', filename='images/Chess_klt60.png') }}" width = "100" height = "100" x = "400" y = "700"></image>
+  <image id = "f1b" href = "{{ url_for('static', filename='images/Chess_blt60.png') }}" width = "100" height = "100" x = "500" y = "700"></image>
+  <image id = "g1kn" href = "{{ url_for('static', filename='images/Chess_nlt60.png') }}" width = "100" height = "100" x = "600" y = "700"></image>
+  <image id = "h1r" href = "{{ url_for('static', filename='images/Chess_rlt60.png') }}" width = "100" height = "100" x = "700" y = "700"></image>
+</svg>
+<script src = "{{ url_for('static', filename='js/init.js') }}"></script>
+<script src = "{{ url_for('static', filename='js/StateManager.js') }}"></script>
+<script src = "{{ url_for('static', filename='js/runGame.js') }}"></script>
+</body>
+</html>

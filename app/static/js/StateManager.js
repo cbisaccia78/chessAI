@@ -74,7 +74,7 @@ class Piece{
 
 
 
-export class Empty extends Piece {
+class Empty extends Piece {
     constructor(color,name,location){
         super(color,name,location);
         this.url = "Empty";
@@ -93,7 +93,7 @@ export class Empty extends Piece {
     }
 }
 
-export class Knight extends Piece{
+class Knight extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -141,7 +141,7 @@ export class Knight extends Piece{
     }
 }
 
-export class Bishop extends Piece{
+class Bishop extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -235,7 +235,7 @@ export class Bishop extends Piece{
 
 }
 
-export class Pawn extends Piece{
+class Pawn extends Piece{
     constructor(color,name,location, moved){
         super(color,name,location);
         this.moved = moved;
@@ -371,7 +371,7 @@ export class Pawn extends Piece{
       }
 }
 
-export class Rook extends Piece{
+class Rook extends Piece{
     constructor(color,name,location){
         super(color,name,location);
 
@@ -477,7 +477,7 @@ export class Rook extends Piece{
 
 
 
-export class Queen extends Piece {
+class Queen extends Piece {
     constructor(color,name,location){
         super(color,name,location);
 
@@ -771,7 +771,7 @@ function yTranslate(rank){
     return parseInt(rank) - 1;
   }
 
-export class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece, x, y]
+class Game{//    Game.move([piece, x, y])      #move is defined as move = [piece, x, y]
     constructor(time,p1name, p2name){
 
         this.p1 = new Player(p1name, time);

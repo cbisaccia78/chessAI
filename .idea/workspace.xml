@@ -2,8 +2,28 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1856fda1-edd5-4667-ac42-b84ecf10a285" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/backend/MoveResolver.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/MoveResolver.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/backend/public/js/StateManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/backend/public/js/StateManager.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/static/js/init.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/app/templates/game.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_bdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_bdt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_blt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_blt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_kdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_kdt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_klt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_klt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_ndt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_ndt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_nlt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_nlt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_pdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_pdt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_plt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_plt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_qdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_qdt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_qlt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_qlt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_rdt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_rdt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/images/Chess_rlt60.png" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/images/Chess_rlt60.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/runGame.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/js/MoveResolver.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/MoveResolver.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/js/StateManager.js" beforeDir="false" afterPath="$PROJECT_DIR$/app/static/js/StateManager.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/js/runGame.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/public/test.html" beforeDir="false" afterPath="$PROJECT_DIR$/app/templates/test.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/app/run.py" beforeDir="false" afterPath="$PROJECT_DIR$/app/run.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -12,6 +32,13 @@
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="GithubPullRequestsUISettings">
+    <option name="hiddenUrls">
+      <set>
+        <option value="https://github.com/cbisaccia78/chessai" />
+      </set>
+    </option>
   </component>
   <component name="ProjectId" id="1m2Bvgr7RW8gL77OB6bqIf4uH4j" />
   <component name="ProjectViewState">
@@ -22,6 +49,12 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+  </component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/app/templates" />
+    </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -36,5 +69,16 @@
   </component>
   <component name="UnknownFeatures">
     <option featureType="com.intellij.fileTypeFactory" implementationName="*.js" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
 </project>

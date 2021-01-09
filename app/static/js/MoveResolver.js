@@ -1,7 +1,3 @@
-
-
-var statemanager = require('./StateManager.js');
-
 function h(sum){
   return 1/(1+Math.exp(-1*(sum)));
 }
@@ -114,7 +110,7 @@ class SigmoidNet {
     /*creates a fully connected sigmoid net using the node class defined above (planning for optimal brain damage algo, but also should allow for tilling)
     propagates the weights forward, so that in the backproplearning algo you can avoid this step.
     */
-    var game = new statemanager.Game(5, "computer", "computer");
+    var game = new Game(5, "computer", "computer");
     this.initialBitboard = generateInitialBitboard(game);
     this.bitboardSequence.push(this.initialBitboard);
     //console.log(this.initialBitboard)
@@ -393,7 +389,7 @@ var signet = new SigmoidNet([[1,1,1]],[5,5],[1]);//try it with 1 hidden layer
 //signet.forwardProp(signet.initialBitboard);
 
 
-var game = new statemanager.Game("computer", "computer", 5);
+var game = new Game("computer", "computer", 5);
 var p = game.getPlayer(game.turn);
 var count = 0;
 while(count < 10000){
